@@ -2,19 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent (typeof (CharacterController2D))]
+[RequireComponent (typeof (PlayerController))]
 
 public class Player : MonoBehaviour {
 
     float gravity = -20f;
     float moveVelocity = 5f;
     float jumpVelocity = 10f;
-    CharacterController2D controller;
+    PlayerController controller;
     Vector2 velocity;
     
 	void Start ()
     {
-        controller = GetComponent<CharacterController2D>();
+        controller = GetComponent<PlayerController>();
 	}
 
     private void Update()
@@ -22,12 +22,12 @@ public class Player : MonoBehaviour {
         velocity.x = Input.GetAxisRaw("Horizontal") * moveVelocity;
 
         // prevent gravity buildup and prevent from sticking top
-        if (controller.state.IsCollidingBelow || controller.state.IsCollidingAbove)
+        if (controller.collisionInfo.below || controller.collisionInfo.above)
         {
             velocity.y = 0f;
         }
 
-        if (Input.GetKeyDown(KeyCode.Space) && controller.state.IsCollidingBelow)
+        if (Input.GetKeyDown(KeyCode.Space) && controller.collisionInfo.below)
         {
             velocity.y = jumpVelocity;
         }
