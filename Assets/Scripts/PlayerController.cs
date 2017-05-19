@@ -7,7 +7,7 @@ public class PlayerController : MonoBehaviour
 {
 
     int verticalRayCount = 4;
-    int horizontalRayCount = 4;
+    int horizontalRayCount = 5;
     float skinWidth = 0.015f;
     float verticalRaySpacing, horizontalRaySpacing;
     BoxCollider2D myCollider;
@@ -45,11 +45,18 @@ public class PlayerController : MonoBehaviour
 
     public void Move(Vector2 deltaMovement)
     {
+        
         collisionInfo.Reset();
         if (deltaMovement.y != 0)
             HandleVerticalMovement(ref deltaMovement);
         if (deltaMovement.x != 0)
             HandleHorizontalMovement(ref deltaMovement);
+
+        //if (collisionInfo.above || collisionInfo.below)
+        //{
+        //    deltaMovement.y = 0;
+        //}
+
         transform.Translate(deltaMovement);
     }
 
@@ -92,7 +99,7 @@ public class PlayerController : MonoBehaviour
         for (int i = 0; i < horizontalRayCount; i++)
         {
             Vector2 rayVector = new Vector2(rayOrigin.x, rayOrigin.y + i * horizontalRaySpacing);
-            Debug.DrawRay(rayVector, direction, Color.red);
+            Debug.DrawRay(rayVector, direction * raycastDistance, Color.red);
             RaycastHit2D hit = Physics2D.Raycast(rayVector, direction, raycastDistance, layerMask);
 
             if (hit)

@@ -21,7 +21,7 @@ public class Player : MonoBehaviour {
     {
         velocity.x = Input.GetAxisRaw("Horizontal") * moveVelocity;
 
-        // prevent gravity buildup and prevent from sticking top
+        //prevent gravity buildup and prevent from sticking top
         if (controller.collisionInfo.below || controller.collisionInfo.above)
         {
             velocity.y = 0f;
