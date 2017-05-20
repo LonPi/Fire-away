@@ -3,24 +3,30 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent (typeof (PlayerController))]
-
 public class Player : MonoBehaviour {
 
+    public GameObject Fireball;
     float gravity = -20f;
     float moveVelocity = 5f;
     float jumpVelocity = 10f;
     float blinkDistance = 3f;
     PlayerController controller;
-    Vector2 velocity;
+    Vector2 _velocity;
+    Vector2 _localScale;
+    Transform _transform;
+    Vector2 _spriteSize;
     
 	void Start ()
     {
         controller = GetComponent<PlayerController>();
+        _localScale = transform.localScale;
+        _transform = transform;
+        _spriteSize = new Vector2(GetComponent<SpriteRenderer>().bounds.size.x, GetComponent<SpriteRenderer>().bounds.size.y);
 	}
 
     private void Update()
     {
-        //HandleMovement();
+        HandleMovement();
         HandleSpells();
     }
 
@@ -32,26 +38,24 @@ public class Player : MonoBehaviour {
         //prevent gravity buildup and prevent from sticking top
         if (controller.collisionInfo.below || _collisionInfo.above)
         {
-            velocity.y = 0f;
+            _velocity.y = 0f;
         }
 
         if (Input.GetKeyDown(KeyCode.Space) && _collisionInfo.below)
         {
-            velocity.y = jumpVelocity;
+            _velocity.y = jumpVelocity;
         }
 
-        velocity.x = Input.GetAxisRaw("Horizontal") * moveVelocity;
-        velocity.y += gravity * Time.deltaTime;
-        controller.Move(velocity * Time.deltaTime);
+        _velocity.x = Input.GetAxisRaw("Horizontal") * moveVelocity;
+        _velocity.y += gravity * Time.deltaTime;
+        controller.Move(_velocity * Time.deltaTime);
     }
 
     void HandleSpells()
     {
-        // TODO: play animation for each spells
         if (Input.GetKeyDown(KeyCode.Q))
         {
             Debug.Log("melee");
-            // check enemy in melee range
         }
 
         if (Input.GetKeyDown(KeyCode.W))
@@ -74,13 +78,15 @@ public class Player : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.E))
         {
             Debug.Log("fireball");
-            // spawn fireball sprite and check collision for that sprite
+            var _state = controller.state;
+            float offset_x = _state.isMovingRight ? _spriteSize.y / 2 : -1 * _spriteSize.y/2;
+            Vector2 spawnPosition = new Vector2(_transform.position.x + offset_x, _transform.position.y);
+            Instantiate(Fireball,spawnPosition,Quaternion.identity,_transform);
         }
 
         if (Input.GetKeyDown(KeyCode.R))
         {
             Debug.Log("meteor");
-            // same as fireball
         }
     }
 
