@@ -5,7 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(BoxCollider2D))]
 public class PlayerController : MonoBehaviour
 {
-    int verticalRayCount = 4;
+    int verticalRayCount = 6;
     int horizontalRayCount = 6;
     float skinWidth = 0.015f;
     float verticalRaySpacing, horizontalRaySpacing;
@@ -24,16 +24,17 @@ public class PlayerController : MonoBehaviour
         state.Reset();
     }
 
-    void Update()
-    {
-        CalculateRaycastOrigins();
-    }
-
     void CalculateRaySpacing()
     {
         Bounds bounds = myCollider.bounds;
         verticalRaySpacing = (bounds.size.x - 2 * skinWidth) / (verticalRayCount - 1);
         horizontalRaySpacing = (bounds.size.y - 2 * skinWidth) / (horizontalRayCount - 1);
+    }
+
+    private void Update()
+    {
+        CalculateRaySpacing();
+        CalculateRaycastOrigins();
     }
 
     void CalculateRaycastOrigins()
@@ -55,8 +56,6 @@ public class PlayerController : MonoBehaviour
             HandleVerticalMovement(ref deltaMovement);
         if (deltaMovement.x != 0)
             HandleHorizontalMovement(ref deltaMovement);
-
-        
         transform.Translate(deltaMovement);
     }
 

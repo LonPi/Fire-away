@@ -12,15 +12,13 @@ public class Player : MonoBehaviour {
     float blinkDistance = 3f;
     PlayerController controller;
     Vector2 _velocity;
-    Vector2 _localScale;
-    Transform _transform;
+    Vector2 _localScale { get { return transform.localScale; } }
+    Transform _transform { get { return transform; } }
     Vector2 _spriteSize;
     
 	void Start ()
     {
         controller = GetComponent<PlayerController>();
-        _localScale = transform.localScale;
-        _transform = transform;
         _spriteSize = new Vector2(GetComponent<SpriteRenderer>().bounds.size.x, GetComponent<SpriteRenderer>().bounds.size.y);
 	}
 
