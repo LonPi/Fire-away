@@ -5,7 +5,15 @@ using UnityEngine;
 [RequireComponent (typeof (PlayerController))]
 public class Player : MonoBehaviour {
 
-    public GameObject Fireball;
+    public GameObject Fireball, Meteor;
+    public float meleeRange;
+    public float meteorSpawnHeight;
+    public float hitPoints;
+    public float meleeDamage;
+    public float meleeCooldownTime;
+    public float blinkCooldownTime;
+    public float fireballCooldownTime;
+    public float meteorCooldownTime;
     float gravity = -20f;
     float moveVelocity = 5f;
     float jumpVelocity = 10f;
@@ -13,7 +21,7 @@ public class Player : MonoBehaviour {
     PlayerController controller;
     Vector2 _velocity;
     Vector2 _localScale { get { return transform.localScale; } }
-    Transform _transform { get { return transform; } }
+    public Transform _transform { get { return transform; } }
     Vector2 _spriteSize;
     
 	void Start ()
@@ -51,9 +59,24 @@ public class Player : MonoBehaviour {
 
     void HandleSpells()
     {
+        var _state = controller.state;
         if (Input.GetKeyDown(KeyCode.Q))
         {
             Debug.Log("melee");
+            Vector2 direction = _state.isMovingRight ? Vector2.right : Vector2.left;
+            Vector2 raycastOrigin;
+            if (direction == Vector2.left)
+                raycastOrigin = new Vector2(_transform.position.x - _spriteSize.x / 2, _transform.position.y);
+            else
+                raycastOrigin = new Vector2(_transform.position.x + _spriteSize.x / 2, _transform.position.y);
+            RaycastHit2D hit = Physics2D.Raycast(raycastOrigin, direction, meleeRange, 1 << LayerMask.NameToLayer("Enemy"));
+            Debug.DrawRay(raycastOrigin, direction * meleeRange, Color.cyan);
+            if (hit)
+            {
+                Enemy enemy = hit.collider.gameObject.GetComponent<Enemy>();
+                Debug.Log("Player: enemy has taken " + meleeDamage + " melee damage.");
+                enemy.TakeDamage(meleeDamage);
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.W))
@@ -76,7 +99,6 @@ public class Player : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.E))
         {
             Debug.Log("fireball");
-            var _state = controller.state;
             float offset_x = _state.isMovingRight ? _spriteSize.y / 2 : -1 * _spriteSize.y/2;
             Vector2 spawnPosition = new Vector2(_transform.position.x + offset_x, _transform.position.y);
             Instantiate(Fireball,spawnPosition,Quaternion.identity,_transform);
@@ -85,6 +107,20 @@ public class Player : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.R))
         {
             Debug.Log("meteor");
+            float offset_x = _state.isMovingRight ? _spriteSize.y / 2 : -1 * _spriteSize.y / 2;
+            Vector2 spawnPosition = new Vector2(transform.position.x + offset_x, _transform.position.y + meteorSpawnHeight);
+            Instantiate(Meteor, spawnPosition, Quaternion.identity, _transform);
+        }
+    }
+
+    public void TakeDamage(float damage)
+    {
+        hitPoints -= damage;
+        Debug.Log("Player: took " + damage + " damage. HP remaining: " + hitPoints);
+        if (hitPoints <= 0)
+        {
+            Debug.Log("Player is dead.");
+            Destroy(gameObject);
         }
     }
 

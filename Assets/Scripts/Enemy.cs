@@ -4,49 +4,65 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour {
     // public variables
-    public GameObject Bullet;
     public float moveVelocity;
-    public float attackFrequency = 1f;
+    public float hitPoints;
+    public float damage;
     // private variables
-    Player _playerRef { get { return GameManager.instance._playerRef; } }
-    float attackTimer = 0f;
-    Vector2 _targetPosition;
     Vector2 _spriteSize;
     Vector2 _initialSpawnPosition;
     Vector2 _moveDirection;
     Transform _transform { get { return transform; } }
     Vector3 _localScale { get { return transform.localScale; } }
+    bool _wasCollidingBefore;
 
 	void Start () {
-        
-        _spriteSize = new Vector2(GetComponent<SpriteRenderer>().size.x, GetComponent<SpriteRenderer>().size.y);
+        _spriteSize = new Vector2(GetComponent<SpriteRenderer>().bounds.size.x, GetComponent<SpriteRenderer>().bounds.size.y);
         _initialSpawnPosition = transform.position;
         _moveDirection = Vector2.left;
-        if (_initialSpawnPosition.x - _playerRef.transform.position.x < 0)
+        _wasCollidingBefore = false;
+        if (_initialSpawnPosition.x < 0)
             _moveDirection = Vector2.right;
     }
 	
 	void Update () {
-
         Move();
-    }
-
-    void FireBullet()
-    {
-        attackTimer += Time.deltaTime;
-        if (attackTimer >= attackFrequency)
-        {
-            float offset_x = _spriteSize.y / 2;
-            Vector2 spawnPosition = new Vector2(_transform.position.x + offset_x, _transform.position.y);
-            Instantiate(Bullet, spawnPosition, Quaternion.identity);
-            attackTimer = 0f;
-        }
+        InflictDamage();
     }
 
     void Move()
     {
         Flip();
         transform.Translate(_moveDirection * moveVelocity * Time.deltaTime);
+    }
+
+    public void TakeDamage(float _damage)
+    {
+        hitPoints -= _damage;
+        Debug.Log("Enemy: took " + _damage + " damage. HP remaining: " + hitPoints);
+        if (hitPoints <= 0)
+        {
+            Debug.Log("Enemy dead.");
+            Destroy(gameObject);
+        }
+    }
+
+    void InflictDamage()
+    {
+        float raycastDistance, raycastRadius;
+        raycastDistance = raycastRadius = _spriteSize.x / 2;
+        RaycastHit2D hit = Physics2D.CircleCast(_transform.position, raycastRadius, _moveDirection, raycastDistance, 1 << LayerMask.NameToLayer("Player"));
+        if (hit && !_wasCollidingBefore)
+        {
+            // TODO: there will be more friendly object types
+            Debug.Log("Player taking damage from enemy!!!");
+            Player player = hit.collider.gameObject.GetComponent<Player>();
+            player.TakeDamage(damage);
+            _wasCollidingBefore = true;
+        }
+        if (!hit && _wasCollidingBefore)
+        {
+            _wasCollidingBefore = false;
+        }
     }
 
     void Flip()

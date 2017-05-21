@@ -8,10 +8,6 @@ public class GameManager : MonoBehaviour {
     public GameObject Enemy;
     public Transform[] SpawnPositions;
     public float spawnFrequency;
-    public float maxEnemies;
-    float spawnTimer = 0f;
-    float numEnemies = 0;
-    public float enemyLifeSpan;
     public Player _playerRef { get; private set; }
     Vector2 curSpawnPosition;
 
@@ -21,34 +17,22 @@ public class GameManager : MonoBehaviour {
             instance = this;
         else if (instance != this)
             Destroy(gameObject);
+        DontDestroyOnLoad(gameObject);
     }
 
-    // Use this for initialization
     void Start () {
         _playerRef = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
-	}
-	
-	// Update is called once per frame
-	void Update () {
-        SpawnEnemy();
+        StartCoroutine(_SpawnEnemy());
 	}
 
-    void SpawnEnemy()
+    IEnumerator _SpawnEnemy()
     {
-        spawnTimer += Time.deltaTime;
-        float index = Random.Range(0, 1.99f);
-        curSpawnPosition = SpawnPositions[(int)Mathf.Floor(index)].position;
-
-        if (spawnTimer >= 1/spawnFrequency)
+        while (true)
         {
-            if (numEnemies < maxEnemies)
-            {
-                
-                GameObject enemy = Instantiate(Enemy, curSpawnPosition, Quaternion.identity);
-                Destroy(enemy, enemyLifeSpan);
-                numEnemies++;
-            }
-            spawnTimer = 0f;
+            float index = Random.Range(0, 1.99f);
+            curSpawnPosition = SpawnPositions[(int)Mathf.Floor(index)].position;
+            yield return new WaitForSeconds(1 / spawnFrequency);
+            Instantiate(Enemy, curSpawnPosition, Quaternion.identity);
         }
     }
 }
