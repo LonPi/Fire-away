@@ -119,36 +119,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void Blink(Vector2 deltaMovement, Vector2 direction)
-    {
-        // raycast to blink destination
-        float raycastDistance = Mathf.Abs(deltaMovement.x) + skinWidth;
-        Vector2 raycastOrigin = state.isMovingRight ? raycastBottomRight : raycastBottomLeft;
-        
-        for (int i = 0; i < horizontalRayCount; i++)
-        {
-            Vector2 rayVector = new Vector2(raycastOrigin.x, raycastOrigin.y + i * horizontalRaySpacing);
-            Debug.DrawRay(rayVector, raycastDistance * direction, Color.green);
-            RaycastHit2D hit = Physics2D.Raycast(rayVector, direction, raycastDistance, layerMask);
-            if (!hit) continue;
-            deltaMovement.x = hit.point.x - rayVector.x;
-            raycastDistance = Mathf.Abs(deltaMovement.x) + skinWidth;
-            if (state.isMovingRight)
-            {
-                deltaMovement.x -= skinWidth;
-                collisionInfo.right = true;
-            }
-            else
-            {
-                deltaMovement.x += skinWidth;
-                collisionInfo.left = true;
-            }
-        }
-        
-        // teleport to destination
-        transform.Translate(deltaMovement);
-    }
-
     public struct State
     {
         public bool isMovingRight, isFalling;

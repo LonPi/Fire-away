@@ -21,9 +21,10 @@ GameObject:
   - component: {fileID: 4924917910182348}
   - component: {fileID: 212406703788579826}
   - component: {fileID: 61751664704134636}
+  - component: {fileID: 50739049409278556}
   - component: {fileID: 114746730794180822}
   - component: {fileID: 114497082030737248}
-  - component: {fileID: 50739049409278556}
+  - component: {fileID: 114424888384022830}
   m_Layer: 10
   m_Name: Player
   m_TagString: Player
@@ -38,7 +39,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1759738860750550}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.24, y: -3.69, z: 0}
+  m_LocalPosition: {x: -0.13, y: -3.6, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -89,6 +90,29 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.9421849, y: 1.58}
   m_EdgeRadius: 0
+--- !u!114 &114424888384022830
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1759738860750550}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 443f29bad37fab3459b21e70927e5fd3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  meleeDamage: 30
+  meleeRange: 3
+  meleeCooldown: 3
+  blinkRange: 3
+  blinkCooldown: 5
+  fireballDamage: 10
+  fireballCooldown: 3
+  meteorStartHeight: 5
+  meteorDamage: 20
+  meteorCooldown: 3
+  Fireball: {fileID: 1322327994715662, guid: 13bc3afb90d47264d879f81f189150ba, type: 2}
+  Meteor: {fileID: 1687449914850802, guid: 73f3fd35271e8aa42b0b0c3d55c8838b, type: 2}
 --- !u!114 &114497082030737248
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -111,12 +135,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de1cdd018b458c945927fd47ded0f4df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Fireball: {fileID: 1322327994715662, guid: 13bc3afb90d47264d879f81f189150ba, type: 2}
-  Meteor: {fileID: 1687449914850802, guid: 73f3fd35271e8aa42b0b0c3d55c8838b, type: 2}
-  meleeRange: 0.5
-  meteorSpawnHeight: 3
   hitPoints: 20
-  meleeDamage: 4
+  gravity: -20
+  moveVelocity: 5
+  jumpVelocity: 10
 --- !u!212 &212406703788579826
 SpriteRenderer:
   m_ObjectHideFlags: 1

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour {
 
@@ -22,8 +23,27 @@ public class GameManager : MonoBehaviour {
 
     void Start () {
         _playerRef = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+        Init();
+    }
+
+    void Init()
+    {
         StartCoroutine(_SpawnEnemy());
-	}
+    }
+
+    public void GameOver()
+    {
+        StopAllCoroutines();
+        StartCoroutine(_ReloadLevel());
+    }
+
+    IEnumerator _ReloadLevel()
+    {
+        yield return new WaitForSeconds(1);
+        Scene currentLevel = SceneManager.GetActiveScene();
+        SceneManager.LoadScene(currentLevel.buildIndex);
+        Init();
+    }
 
     IEnumerator _SpawnEnemy()
     {

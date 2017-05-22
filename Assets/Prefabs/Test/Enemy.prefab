@@ -101,7 +101,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveVelocity: 3
   hitPoints: 10
-  damage: 4
+  damage: 5
 --- !u!212 &212920940716220870
 SpriteRenderer:
   m_ObjectHideFlags: 1
