@@ -33,4 +33,5 @@ sysinfo.txt
 *.apk
 *.unitypackage
 
-.ini
+*.ini
+*.ini.meta

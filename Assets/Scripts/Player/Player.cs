@@ -5,10 +5,12 @@ using UnityEngine;
 [RequireComponent(typeof(PlayerController),typeof(SpellManager))]
 public class Player : MonoBehaviour {
 
-    public float hitPoints;
+    public float maxHitPoints;
+    public float hitPoints { get; private set; }
     public PlayerController Controller { get; private set; }
     public Transform _transform { get { return transform; } private set { } }
     public Vector2 spriteSize { get; private set; }
+
     [SerializeField]
     float 
         gravity, 
@@ -18,6 +20,7 @@ public class Player : MonoBehaviour {
     Vector2 _velocity;
     Vector2 _localScale { get { return transform.localScale; } }
     bool _isDead;
+    Animator animator;
     
 	void Start ()
     {
@@ -25,7 +28,9 @@ public class Player : MonoBehaviour {
         spellManager = GetComponent<SpellManager>();
         spriteSize = new Vector2(GetComponent<SpriteRenderer>().bounds.size.x, GetComponent<SpriteRenderer>().bounds.size.y);
         _isDead = false;
-	}
+        hitPoints = maxHitPoints;
+        animator = GetComponent<Animator>();
+    }
 
     private void Update()
     {
@@ -51,12 +56,16 @@ public class Player : MonoBehaviour {
 
         if (Input.GetKeyDown(KeyCode.Space) && _collisionInfo.below)
         {
-            _velocity.y = jumpVelocity;
+            _velocity.y = jumpVelocity;            
         }
 
         _velocity.x = Input.GetAxisRaw("Horizontal") * moveVelocity;
         _velocity.y += gravity * Time.deltaTime;
         Controller.Move(_velocity * Time.deltaTime);
+        if (Mathf.Abs(_velocity.x) > 1 || Mathf.Abs(_velocity.y) > 1)
+            animator.SetBool("fly", true);
+        else
+            animator.SetBool("fly", false);
     }
 
     void HandleSpells()
@@ -64,6 +73,7 @@ public class Player : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.Q))
         {
             spellManager.meleeSpell.Cast(this);
+            animator.SetTrigger("melee");
         }
 
         if (Input.GetKeyDown(KeyCode.W))
@@ -79,19 +89,20 @@ public class Player : MonoBehaviour {
                 Debug.Log("Can blink to " + (pressLeft ? "left" : "right"));
                 Vector2 direction = pressLeft ? Vector2.left : Vector2.right;
                 spellManager.blinkSpell.Cast(this, direction);
-
+                animator.SetTrigger("blink");
             }
         }
 
         if (Input.GetKeyDown(KeyCode.E))
         {
             spellManager.fireballSpell.Cast(this);
+            animator.SetTrigger("fireball");
         }
 
         if (Input.GetKeyDown(KeyCode.R))
         {
             spellManager.meteorSpell.Cast(this);
-            
+            animator.SetTrigger("ulti");
         }
     }
 
