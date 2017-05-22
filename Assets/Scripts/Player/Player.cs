@@ -98,7 +98,7 @@ public class Player : MonoBehaviour {
     public void TakeDamage(float damage)
     {
         hitPoints -= damage;
-        Debug.LogError("Player: took " + damage + " damage. HP remaining: " + hitPoints);
+        Debug.Log("Player: took " + damage + " damage. HP remaining: " + hitPoints);
         if (hitPoints <= 0)
         {
             Debug.Log("Player is dead.");

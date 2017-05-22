@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class MeleeSpell {
 
-    float 
-        damage, 
-        range, 
+    float
+        damage,
+        range,
         cooldown,
-        timer, 
+        timer,
+        inputDelay = 0.3f,
         lastInputTime;
 
     public MeleeSpell(float damage, float range, float cooldown)
@@ -22,7 +23,6 @@ public class MeleeSpell {
 
     public void Update()
     {
-        Debug.Log("Melee cd: " + timer);
         timer -= Time.deltaTime;
         if (timer <= 0f) timer = 0f;
     }
@@ -34,7 +34,7 @@ public class MeleeSpell {
 
     public bool Cast(Player player)
     {
-        if (!CanCastSpell() || Time.time - lastInputTime <= 1f)
+        if (!CanCastSpell() || Time.time - lastInputTime <= inputDelay)
         {
             return false;
         }
@@ -54,7 +54,6 @@ public class MeleeSpell {
             Enemy enemy = hit.collider.gameObject.GetComponent<Enemy>();
             Debug.Log("Player: enemy has taken " + range + " melee damage.");
             enemy.TakeDamage(range);
-            return true;
         }
         // cooldown active
         timer = cooldown;

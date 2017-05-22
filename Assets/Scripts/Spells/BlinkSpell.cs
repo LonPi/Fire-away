@@ -19,7 +19,6 @@ public class BlinkSpell {
 
     public void Update()
     {
-        Debug.Log("Blink cd: " + timer);
         timer -= Time.deltaTime;
         if (timer <= 0f) timer = 0f;
     }

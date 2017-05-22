@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour {
     public Transform[] SpawnPositions;
     public float spawnFrequency;
     public Player _playerRef { get; private set; }
+    public Tree _treeRef { get; private set; }
     Vector2 curSpawnPosition;
 
     void Awake()
@@ -22,13 +23,13 @@ public class GameManager : MonoBehaviour {
     }
 
     void Start () {
-        _playerRef = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
-        Init();
+        InitReferences();
     }
 
-    void Init()
+    void InitReferences()
     {
-        StartCoroutine(_SpawnEnemy());
+        _playerRef = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+        _treeRef = GameObject.FindGameObjectWithTag("Tree").GetComponent<Tree>();
     }
 
     public void GameOver()
@@ -42,7 +43,6 @@ public class GameManager : MonoBehaviour {
         yield return new WaitForSeconds(1);
         Scene currentLevel = SceneManager.GetActiveScene();
         SceneManager.LoadScene(currentLevel.buildIndex);
-        Init();
     }
 
     IEnumerator _SpawnEnemy()
@@ -51,8 +51,24 @@ public class GameManager : MonoBehaviour {
         {
             float index = Random.Range(0, 1.99f);
             curSpawnPosition = SpawnPositions[(int)Mathf.Floor(index)].position;
-            yield return new WaitForSeconds(1 / spawnFrequency);
             Instantiate(Enemy, curSpawnPosition, Quaternion.identity);
+            yield return new WaitForSeconds(1 / spawnFrequency);
         }
+    }
+
+    void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        InitReferences();
+        StartCoroutine(_SpawnEnemy());
     }
 }

@@ -20,7 +20,6 @@ public class FireballSpell {
 
     public void Update()
     {
-        Debug.Log("Fireball cd: " + timer);
         timer -= Time.deltaTime;
         if (timer <= 0f) timer = 0f;
     }
