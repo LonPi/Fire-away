@@ -66,7 +66,6 @@ public class Player : MonoBehaviour {
         _velocity.y += gravity * Time.deltaTime;
         Vector2 deltaMovement = _velocity * Time.deltaTime;
         Controller.Move(ref deltaMovement);
-        isFacingRight = deltaMovement.x <= 0 ? false : true;
         // round deltaMovement to zero as it will get infinitely small and the animator logic wouldnt work
         if (deltaMovement == Vector2.zero)
             animator.SetBool("fly", false);
@@ -121,10 +120,11 @@ public class Player : MonoBehaviour {
     {
         Vector2 _localScale = transform.localScale;
         // sprite is facing -x direction by default
-        if (!isFacingRight && transform.localScale.x < 0 || isFacingRight && transform.localScale.x > 0)
+        if (!isFacingRight && _velocity.x > 0 || isFacingRight && _velocity.x < 0)
         {
             _localScale.x *= -1;
             transform.localScale = _localScale;
+            isFacingRight = !isFacingRight;
         }
     }
 
