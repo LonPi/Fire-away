@@ -12,11 +12,13 @@ public class SpellManager: MonoBehaviour {
         blinkRange,
         blinkCooldown,
         fireballDamage,
+        fireballMoveSpeed,
+        fireballTravelDistance,
         fireballCooldown,
         meteorStartHeight,
         meteorDamage,
         meteorCooldown;
-    public GameObject Fireball, Meteor;
+    public GameObject FireballPrefab, MeteorPrefab;
 
     public MeleeSpell meleeSpell { get; private set; }
     public BlinkSpell blinkSpell { get; private set; }
@@ -27,8 +29,8 @@ public class SpellManager: MonoBehaviour {
     {
         meleeSpell = new MeleeSpell(meleeDamage, meleeRange, meleeCooldown);
         blinkSpell = new BlinkSpell(blinkRange, blinkCooldown);
-        fireballSpell = new FireballSpell(fireballDamage, fireballCooldown, Fireball);
-        meteorSpell = new MeteorSpell(meteorStartHeight, meteorDamage, meteorCooldown, Meteor);
+        fireballSpell = new FireballSpell(fireballDamage, fireballMoveSpeed, fireballTravelDistance, fireballCooldown, FireballPrefab);
+        meteorSpell = new MeteorSpell(meteorStartHeight, meteorDamage, meteorCooldown, MeteorPrefab);
     }
 
     void Start()

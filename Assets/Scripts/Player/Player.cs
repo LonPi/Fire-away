@@ -10,6 +10,7 @@ public class Player : MonoBehaviour {
     public PlayerController Controller { get; private set; }
     public Transform _transform { get { return transform; } private set { } }
     public Vector2 spriteSize { get; private set; }
+    public bool isFacingRight { get; private set; }
 
     [SerializeField]
     float 
@@ -18,9 +19,9 @@ public class Player : MonoBehaviour {
         jumpVelocity;
     SpellManager spellManager;
     Vector2 _velocity;
-    Vector2 _localScale { get { return transform.localScale; } }
     bool _isDead;
     Animator animator;
+    
     
 	void Start ()
     {
@@ -30,12 +31,14 @@ public class Player : MonoBehaviour {
         _isDead = false;
         hitPoints = maxHitPoints;
         animator = GetComponent<Animator>();
+        isFacingRight = false;
     }
 
     private void Update()
     {
         HandleMovement();
         HandleSpells();
+        
         if (hitPoints <= 0 && !_isDead)
         {
             GameManager.instance.GameOver();
@@ -61,22 +64,25 @@ public class Player : MonoBehaviour {
 
         _velocity.x = Input.GetAxisRaw("Horizontal") * moveVelocity;
         _velocity.y += gravity * Time.deltaTime;
-        Controller.Move(_velocity * Time.deltaTime);
-        if (Mathf.Abs(_velocity.x) > 1 || Mathf.Abs(_velocity.y) > 1)
-            animator.SetBool("fly", true);
-        else
+        Vector2 deltaMovement = _velocity * Time.deltaTime;
+        Controller.Move(ref deltaMovement);
+        isFacingRight = deltaMovement.x <= 0 ? false : true;
+        // round deltaMovement to zero as it will get infinitely small and the animator logic wouldnt work
+        if (deltaMovement == Vector2.zero)
             animator.SetBool("fly", false);
+        else
+            animator.SetBool("fly", true);
     }
 
     void HandleSpells()
     {
-        if (Input.GetKeyDown(KeyCode.Q))
+        if (Input.GetKey(KeyCode.Q) && spellManager.meleeSpell.CanCast())
         {
             spellManager.meleeSpell.Cast(this);
             animator.SetTrigger("melee");
         }
 
-        if (Input.GetKeyDown(KeyCode.W))
+        if (Input.GetKey(KeyCode.W) && spellManager.blinkSpell.CanCast())
         {
             bool pressLeft = Input.GetKey(KeyCode.LeftArrow);
             bool pressRight = Input.GetKey(KeyCode.RightArrow);
@@ -93,13 +99,13 @@ public class Player : MonoBehaviour {
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKey(KeyCode.E) && spellManager.fireballSpell.CanCast())
         {
             spellManager.fireballSpell.Cast(this);
             animator.SetTrigger("fireball");
         }
 
-        if (Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKey(KeyCode.R) && spellManager.meteorSpell.CanCast())
         {
             spellManager.meteorSpell.Cast(this);
             animator.SetTrigger("ulti");
@@ -109,22 +115,29 @@ public class Player : MonoBehaviour {
     public void TakeDamage(float damage)
     {
         hitPoints -= damage;
-        Debug.Log("Player: took " + damage + " damage. HP remaining: " + hitPoints);
-        if (hitPoints <= 0)
-        {
-            Debug.Log("Player is dead.");
-        }
     }
 
     void Flip()
     {
-        var _state = Controller.state;
         Vector2 _localScale = transform.localScale;
         // sprite is facing -x direction by default
-        if (_state.isMovingRight && _localScale.x > 0 || !_state.isMovingRight && _localScale.x < 0)
+        if (!isFacingRight && transform.localScale.x < 0 || isFacingRight && transform.localScale.x > 0)
         {
             _localScale.x *= -1;
             transform.localScale = _localScale;
         }
+    }
+
+    public void IndicateBlink()
+    {
+        StartCoroutine(_Blink());
+    }
+
+    IEnumerator _Blink()
+    {
+        SpriteRenderer _spriteRenderer = GetComponent<SpriteRenderer>();
+        _spriteRenderer.enabled = false;
+        yield return new WaitForSeconds(0.5f);
+        _spriteRenderer.enabled = true;
     }
 }

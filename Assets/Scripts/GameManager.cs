@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour {
 
     public static GameManager instance = null;
-    public GameObject Enemy;
+    public GameObject[] Enemies;
     public Transform[] SpawnPositions;
     public float spawnFrequency;
     public Player _playerRef { get; private set; }
@@ -49,9 +49,11 @@ public class GameManager : MonoBehaviour {
     {
         while (true)
         {
-            float index = Random.Range(0, 1.99f);
-            curSpawnPosition = SpawnPositions[(int)Mathf.Floor(index)].position;
-            Instantiate(Enemy, curSpawnPosition, Quaternion.identity);
+            float spawnIndex = Random.Range(0, SpawnPositions.Length-0.01f);
+            float enemyIndex = Random.Range(0, Enemies.Length - 0.01f);
+            curSpawnPosition = SpawnPositions[(int)Mathf.Floor(spawnIndex)].position;
+            GameObject selectedEnemy = Enemies[(int)Mathf.Floor(enemyIndex)];
+            Instantiate(selectedEnemy, curSpawnPosition, Quaternion.identity);
             yield return new WaitForSeconds(1 / spawnFrequency);
         }
     }

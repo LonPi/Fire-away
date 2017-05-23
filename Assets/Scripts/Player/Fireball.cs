@@ -4,45 +4,57 @@ using UnityEngine;
 
 public class Fireball : MonoBehaviour {
 
-    public float moveSpeed;
-    public float damage;
-    public float lifeSpan;
-    PlayerController controller;
+    float
+        moveSpeed,
+        damage,
+        travelDistance;
+    int moveDirection;
+    Player player;
     Vector2 _velocity;
-    bool _wasCollingBefore;
+    Vector2 targetPosition;
     Vector2 _spriteSize;
 
 	void Start () {
-        controller = GetComponentInParent<PlayerController>();
+        player = GetComponentInParent<Player>();
         _spriteSize = new Vector2(GetComponent<SpriteRenderer>().bounds.size.x, GetComponent<SpriteRenderer>().bounds.size.y);
-        var _state = controller.state;
-        if (_state.isMovingRight) _velocity = new Vector2(moveSpeed, 0f);
-        else _velocity = new Vector2(-1 * moveSpeed, 0f);
+        targetPosition = new Vector2(transform.position.x + travelDistance, transform.position.y);
+        _velocity = new Vector2(moveSpeed * moveDirection, 0f);
         transform.parent = null;
-        _wasCollingBefore = false;
     }
-	
-	void Update () {
-        transform.Translate(_velocity * Time.deltaTime);
+
+    void Update () {
+        Move();
         InflictDamage();
+    }
+
+    void Move()
+    {
+        transform.position = Vector2.MoveTowards(transform.position, targetPosition, _velocity.x * Time.deltaTime);
+        if ((Vector2)transform.position == targetPosition)
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    public void SetParams(float moveSpeed, float damage, float travelDistance, int moveDirection)
+    {
+        this.moveSpeed = moveSpeed;
+        this.damage = damage;
+        this.travelDistance = travelDistance;
+        this.moveDirection = moveDirection;
     }
 
     void InflictDamage()
     {
         float raycastRadius, raycastDistance;
-        Vector2 directionX = _velocity.x < 0 ? Vector2.left : Vector2.right;
+        Vector2 raycastDirection = _velocity.x < 0 ? Vector2.left : Vector2.right;
         raycastDistance = raycastRadius = _spriteSize.x/2;
-        RaycastHit2D hit = Physics2D.CircleCast(transform.position, raycastRadius, directionX, raycastDistance, 1 << LayerMask.NameToLayer("Enemy"));
-        if (hit && !_wasCollingBefore)
+        Vector2 raycastOrigin = transform.position;
+        RaycastHit2D[] hits = Physics2D.CircleCastAll(raycastOrigin, raycastRadius, raycastDirection, raycastDistance, 1 << LayerMask.NameToLayer("Enemy"));
+        foreach (RaycastHit2D hit in hits)
         {
             Enemy enemy = hit.collider.gameObject.GetComponent<Enemy>();
-            Debug.Log("Fireball: " + damage + " damage inflicted to enemy");
             enemy.TakeDamage(damage);
-            _wasCollingBefore = true;
-        }
-        if (!hit && _wasCollingBefore)
-        {
-            _wasCollingBefore = false;
         }
     }
 }

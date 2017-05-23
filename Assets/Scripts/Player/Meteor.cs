@@ -4,34 +4,62 @@ using UnityEngine;
 
 public class Meteor : MonoBehaviour {
 
-    public float moveVelocity;
-    public float damage;
-    PlayerController controller;
-    Rigidbody2D rb2D;
-    Vector2 _velocity;
-    Vector2 direction;
+    float damage;
+    public Transform _transform { get { return transform; } private set { } }
+    SpriteRenderer _spriteRenderer;
+    BoxCollider2D _boxCollider;
+    const float damageRegisterInterval = 0.5f;
+    float lastDamageTime;
 
-    void Start () {
-        controller = GetComponentInParent<PlayerController>();
-        rb2D = GetComponent<Rigidbody2D>();
-        transform.parent = null;
-        var _state = controller.state;
-        direction = _state.isMovingRight ? Vector2.right : Vector2.left;
-        rb2D.AddForce(new Vector2(moveVelocity * direction.x, 0f));
-
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision)
+    void Start ()
     {
-        if ((collision.gameObject.layer == LayerMask.NameToLayer("Enemy")))
+        _spriteRenderer = GetComponent<SpriteRenderer>();
+        _boxCollider = GetComponent<BoxCollider2D>();
+        transform.parent = null;
+        Physics2D.IgnoreLayerCollision(gameObject.layer, LayerMask.NameToLayer("Friendly"));
+    }
+
+    public void SetParams(float damage)
+    {
+        this.damage = damage;
+    }
+
+    private void Update()
+    {
+        string frame = _spriteRenderer.sprite.name;
+        // cap the damage instance per second
+        if ((Time.time - lastDamageTime >= damageRegisterInterval) && (frame == "player_UltFx3" || frame == "player_UltFx4"))
         {
-            Enemy enemy = collision.gameObject.GetComponent<Enemy>();
-            Debug.Log("Meteor: " + damage + " damage inflicted to enemy");
-            enemy.TakeDamage(damage);
-            
+            InflictDamage();
         }
-        Destroy(gameObject,3);
+        if (frame == "player_UltFx5")
+        {
+            SelfDestroy();
+        }
+    }
+
+    void InflictDamage()
+    {
+        Bounds bounds = _boxCollider.bounds;
+        Vector2 raycastOrigin = bounds.center;
+        float raycastDistance = bounds.size.y;
+        Vector2 raycastDirection = Vector2.down;
+
+        RaycastHit2D[] hits = Physics2D.CircleCastAll(raycastOrigin, raycastDistance, raycastDirection, raycastDistance, 1 << LayerMask.NameToLayer("Enemy"));
+        foreach(RaycastHit2D hit in hits)
+        {
+            Enemy enemy = hit.collider.gameObject.GetComponent<Enemy>();
+            if (enemy != null)
+            {
+                enemy.TakeDamage(damage);
+            }
+        }
+        lastDamageTime = Time.time;
     }
 
 
+    void SelfDestroy()
+    {
+        Destroy(gameObject,1f);
+    }
 }

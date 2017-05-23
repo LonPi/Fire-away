@@ -9,24 +9,30 @@ public class Enemy : MonoBehaviour {
     public float damage;
     // private variables
     Vector2 _spriteSize;
-    Vector2 _initialSpawnPosition;
     Transform _transform { get { return transform; } }
     Vector3 _localScale { get { return transform.localScale; } }
     Vector2 _targetPosition;
     Vector2 _moveDirection;
-    float lastRaycastTime;
+    float lastAttackTime;
+    float attackInterval = 0.5f;
+    bool _isDead;
+    Animator animator;
 
 	void Start () {
+        animator = GetComponent<Animator>();
         _spriteSize = new Vector2(GetComponent<SpriteRenderer>().bounds.size.x, GetComponent<SpriteRenderer>().bounds.size.y);
-        _initialSpawnPosition = transform.position;
         _targetPosition= GameManager.instance._treeRef.transform.position;
         _moveDirection = (_targetPosition.x - transform.position.x > 0 ? Vector2.right : Vector2.left);
+        _isDead = false;
     }
 	
 	void Update () {
-        Move();
-        if (Time.time - lastRaycastTime > 0.5f)
-            InflictDamage();
+        if (!_isDead)
+        {
+            Move();
+            if ((Time.time - lastAttackTime >= attackInterval))
+                InflictDamage();
+        }
     }
 
     void Move()
@@ -38,11 +44,11 @@ public class Enemy : MonoBehaviour {
     public void TakeDamage(float _damage)
     {
         hitPoints -= _damage;
-        Debug.Log("Enemy: took " + _damage + " damage. HP remaining: " + hitPoints);
         if (hitPoints <= 0)
         {
-            Debug.Log("Enemy dead.");
-            Destroy(gameObject);
+            _isDead = true;
+            animator.SetTrigger("dead");
+            Destroy(gameObject,2);
         }
     }
 
@@ -51,7 +57,7 @@ public class Enemy : MonoBehaviour {
         float raycastDistance, raycastRadius;
         raycastDistance = raycastRadius = _spriteSize.x / 2;
         RaycastHit2D hit = Physics2D.CircleCast(_transform.position, raycastRadius, _moveDirection, raycastDistance, 1 << LayerMask.NameToLayer("Friendly"));
-        lastRaycastTime = Time.time;
+        lastAttackTime = Time.time;
         if (hit)
         {
             Player player = hit.collider.gameObject.GetComponent<Player>();

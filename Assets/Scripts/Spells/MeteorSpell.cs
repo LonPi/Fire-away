@@ -8,16 +8,18 @@ public class MeteorSpell {
         damage,
         cooldown,
         timer,
-        lastInputTime;
-    GameObject Meteor;
+        lastInputTime,
+        inputDelay;
+    GameObject MeteorPrefab;
 
-    public MeteorSpell(float startHeight, float damage, float cooldown, GameObject Meteor)
+    public MeteorSpell(float startHeight, float damage, float cooldown, GameObject MeteorPrefab)
     {
         this.startHeight = startHeight;
         this.damage = damage;
         this.cooldown = cooldown;
         timer = 0f;
-        this.Meteor = Meteor;
+        this.MeteorPrefab = MeteorPrefab;
+        this.inputDelay = 0.3f;
     }
 
     public void Update()
@@ -28,21 +30,21 @@ public class MeteorSpell {
 
     public bool CanCast()
     {
-        return timer <= 0f;
+        return timer <= 0f && (Time.time - lastInputTime >= inputDelay);
     }
 
     public bool Cast(Player player)
     {
-        if (!CanCast() || Time.time - lastInputTime <= 1f)
+        if (!CanCast())
             return false;
 
         var _state = player.Controller.state;
         Vector2 spriteSize = player.spriteSize;
         Transform transform = player.transform;
-
-        float offset_x = _state.isMovingRight ? spriteSize.y / 2 : -1 * spriteSize.y / 2;
+        float offset_x = player.isFacingRight ? spriteSize.y / 2 : -1 * spriteSize.y / 2;
         Vector2 meteorStartPosition = new Vector2(transform.position.x + offset_x, transform.position.y + startHeight);
-        GameObject.Instantiate(Meteor, meteorStartPosition, Quaternion.identity, transform);
+        GameObject gameObj = GameObject.Instantiate(MeteorPrefab, meteorStartPosition, Quaternion.identity, transform);
+        gameObj.GetComponent<Meteor>().SetParams(damage);
         lastInputTime = Time.time;
         timer = cooldown;
         return true;

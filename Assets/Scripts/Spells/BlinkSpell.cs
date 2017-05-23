@@ -7,6 +7,7 @@ public class BlinkSpell {
         range,
         cooldown,
         timer,
+        inputDelay,
         lastInputTime;
 
     public BlinkSpell(float range, float cooldown)
@@ -15,6 +16,7 @@ public class BlinkSpell {
         lastInputTime = 0f;
         this.range = range;
         this.cooldown = cooldown;
+        inputDelay = 0.3f;
     }
 
     public void Update()
@@ -23,24 +25,26 @@ public class BlinkSpell {
         if (timer <= 0f) timer = 0f;
     }
 
-    public bool CanCastSpell()
+    public bool CanCast()
     {
-        return timer <= 0f;
+        return timer <= 0f && (Time.time - lastInputTime >= inputDelay);
     }
 
     public bool Cast(Player player, Vector2 direction)
     {
-        if (!CanCastSpell() || Time.time - lastInputTime <= 1f)
+        if (!CanCast())
         {
             return false;
         }
-
-        player.Controller.Move(range * direction);
-
+        Vector2 deltaMovement = range * direction;
+        player.Controller.Move(ref deltaMovement);
+        player.IndicateBlink();
         // cooldown active
         timer = cooldown;
         // record last input time
         lastInputTime = Time.time;
         return true;
     }
+
+
 }

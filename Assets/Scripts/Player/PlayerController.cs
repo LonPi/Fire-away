@@ -49,7 +49,7 @@ public class PlayerController : MonoBehaviour
         raycastBottomLeft = transform.position + new Vector3(center.x - size.x + skinWidth, center.y - size.y + skinWidth);
     }
 
-    public void Move(Vector2 deltaMovement)
+    public void Move(ref Vector2 deltaMovement)
     {
         collisionInfo.Reset();
         if (deltaMovement.y != 0)
@@ -57,6 +57,13 @@ public class PlayerController : MonoBehaviour
         if (deltaMovement.x != 0)
             HandleHorizontalMovement(ref deltaMovement);
         transform.Translate(deltaMovement);
+
+    }
+
+    public void Blink(ref Vector2 deltaMovement)
+    {
+        collisionInfo.Reset();
+        HandleHorizontalMovement(ref deltaMovement);
     }
 
     void HandleVerticalMovement(ref Vector2 deltaMovement)
