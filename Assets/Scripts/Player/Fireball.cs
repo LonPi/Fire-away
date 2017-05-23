@@ -8,23 +8,32 @@ public class Fireball : MonoBehaviour {
         moveSpeed,
         damage,
         travelDistance;
-    int moveDirection;
     Player player;
     Vector2 _velocity;
     Vector2 targetPosition;
     Vector2 _spriteSize;
+    const float damageRegisterInterval = 0.5f;
+    float lastDamageTime;
 
-	void Start () {
+    void Start () {
         player = GetComponentInParent<Player>();
         _spriteSize = new Vector2(GetComponent<SpriteRenderer>().bounds.size.x, GetComponent<SpriteRenderer>().bounds.size.y);
-        targetPosition = new Vector2(transform.position.x + travelDistance, transform.position.y);
-        _velocity = new Vector2(moveSpeed * moveDirection, 0f);
+        _velocity = new Vector2(moveSpeed, 0f);
         transform.parent = null;
+        if (player.isFacingRight)
+            targetPosition = new Vector2(transform.position.x + travelDistance, transform.position.y);
+        else
+            targetPosition = new Vector2(transform.position.x - travelDistance, transform.position.y);
+        
     }
 
     void Update () {
         Move();
-        InflictDamage();
+        // damage instance cap
+        if ((Time.time - lastDamageTime >= damageRegisterInterval))
+        {
+            InflictDamage();
+        }
     }
 
     void Move()
@@ -36,12 +45,11 @@ public class Fireball : MonoBehaviour {
         }
     }
 
-    public void SetParams(float moveSpeed, float damage, float travelDistance, int moveDirection)
+    public void SetParams(float moveSpeed, float damage, float travelDistance)
     {
         this.moveSpeed = moveSpeed;
         this.damage = damage;
         this.travelDistance = travelDistance;
-        this.moveDirection = moveDirection;
     }
 
     void InflictDamage()
@@ -56,5 +64,6 @@ public class Fireball : MonoBehaviour {
             Enemy enemy = hit.collider.gameObject.GetComponent<Enemy>();
             enemy.TakeDamage(damage);
         }
+        lastDamageTime = Time.time;
     }
 }

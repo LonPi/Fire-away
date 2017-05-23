@@ -138,6 +138,7 @@ MonoBehaviour:
   Enemies:
   - {fileID: 1795313975649968, guid: 98110f750c17f1b48ad1794862263a33, type: 2}
   - {fileID: 1795313975649968, guid: 424d0a8a6b82c01439cec3bd5a7b3192, type: 2}
+  - {fileID: 1795313975649968, guid: d01830d814483734cb93132908c61632, type: 2}
   SpawnPositions:
   - {fileID: 671388317}
   - {fileID: 404029235}
@@ -411,7 +412,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 404029234}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 38.5, y: 0.44, z: 0}
+  m_LocalPosition: {x: 47.27, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1302709645}
@@ -442,7 +443,7 @@ RectTransform:
   m_GameObject: {fileID: 471677816}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.05, y: 1.0499998, z: 1.0499998}
+  m_LocalScale: {x: 1.089375, y: 0.99750006, z: 1.0499998}
   m_Children: []
   m_Father: {fileID: 1188221937}
   m_RootOrder: 0
@@ -524,72 +525,35 @@ Prefab:
       propertyPath: m_RootOrder
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 114746730794180822, guid: 2384f79793ddccf4cb0963a78b2e5e99,
+    - target: {fileID: 114424888384022830, guid: 2384f79793ddccf4cb0963a78b2e5e99,
         type: 2}
-      propertyPath: maxHitPoints
-      value: 100
+      propertyPath: meteorCooldown
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114424888384022830, guid: 2384f79793ddccf4cb0963a78b2e5e99,
+        type: 2}
+      propertyPath: meteorInitialFallingHeight
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 114424888384022830, guid: 2384f79793ddccf4cb0963a78b2e5e99,
+        type: 2}
+      propertyPath: meteorCastRange
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 114424888384022830, guid: 2384f79793ddccf4cb0963a78b2e5e99,
+        type: 2}
+      propertyPath: meteorAreaOfDamage
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 114424888384022830, guid: 2384f79793ddccf4cb0963a78b2e5e99,
+        type: 2}
+      propertyPath: fireballCooldown
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 114424888384022830, guid: 2384f79793ddccf4cb0963a78b2e5e99,
         type: 2}
       propertyPath: meleeRange
       value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 114424888384022830, guid: 2384f79793ddccf4cb0963a78b2e5e99,
-        type: 2}
-      propertyPath: meteorGravity
-      value: -20
-      objectReference: {fileID: 0}
-    - target: {fileID: 114424888384022830, guid: 2384f79793ddccf4cb0963a78b2e5e99,
-        type: 2}
-      propertyPath: meteorCooldown
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 114424888384022830, guid: 2384f79793ddccf4cb0963a78b2e5e99,
-        type: 2}
-      propertyPath: FireballPrefab
-      value: 
-      objectReference: {fileID: 1322327994715662, guid: 13bc3afb90d47264d879f81f189150ba,
-        type: 2}
-    - target: {fileID: 114424888384022830, guid: 2384f79793ddccf4cb0963a78b2e5e99,
-        type: 2}
-      propertyPath: MeteorPrefab
-      value: 
-      objectReference: {fileID: 1687449914850802, guid: 73f3fd35271e8aa42b0b0c3d55c8838b,
-        type: 2}
-    - target: {fileID: 114424888384022830, guid: 2384f79793ddccf4cb0963a78b2e5e99,
-        type: 2}
-      propertyPath: meteorStartHeight
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 114424888384022830, guid: 2384f79793ddccf4cb0963a78b2e5e99,
-        type: 2}
-      propertyPath: meteorDamage
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 61751664704134636, guid: 2384f79793ddccf4cb0963a78b2e5e99,
-        type: 2}
-      propertyPath: m_IsTrigger
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114424888384022830, guid: 2384f79793ddccf4cb0963a78b2e5e99,
-        type: 2}
-      propertyPath: fireballMoveSpeed
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 114424888384022830, guid: 2384f79793ddccf4cb0963a78b2e5e99,
-        type: 2}
-      propertyPath: fireballTravelDistance
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 114424888384022830, guid: 2384f79793ddccf4cb0963a78b2e5e99,
-        type: 2}
-      propertyPath: fireballCooldown
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114424888384022830, guid: 2384f79793ddccf4cb0963a78b2e5e99,
-        type: 2}
-      propertyPath: fireballDamage
-      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2384f79793ddccf4cb0963a78b2e5e99, type: 2}
@@ -621,7 +585,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 671388316}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -46.1, y: 0.48, z: 0}
+  m_LocalPosition: {x: -46.58, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1302709645}
@@ -900,7 +864,7 @@ RectTransform:
   m_GameObject: {fileID: 1188221936}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.641646, y: 0.95059997, z: 0.95059997}
+  m_LocalScale: {x: 0.641646, y: 0.6527944, z: 0.95059997}
   m_Children:
   - {fileID: 471677817}
   m_Father: {fileID: 1762816404}

@@ -17,6 +17,8 @@ public class Enemy : MonoBehaviour {
     float attackInterval = 0.5f;
     bool _isDead;
     Animator animator;
+    bool wander;
+    bool hasArrivedTargetDestination;
 
 	void Start () {
         animator = GetComponent<Animator>();
@@ -24,20 +26,33 @@ public class Enemy : MonoBehaviour {
         _targetPosition= GameManager.instance._treeRef.transform.position;
         _moveDirection = (_targetPosition.x - transform.position.x > 0 ? Vector2.right : Vector2.left);
         _isDead = false;
+        wander = false;
+        hasArrivedTargetDestination = false;
     }
 	
 	void Update () {
-        if (!_isDead)
-        {
-            Move();
-            if ((Time.time - lastAttackTime >= attackInterval))
-                InflictDamage();
-        }
+        if (_isDead)
+            return;
+
+        Move();
+
+        if ((Time.time - lastAttackTime >= attackInterval))
+            InflictDamage();
+        
     }
 
     void Move()
     {
         Flip();
+        if (transform.position.x == _targetPosition.x && _targetPosition.x == GameManager.instance._treeRef.transform.position.x)
+        {
+            float randomDirX = Random.Range(-1.99f, 1.99f);
+            float randomDistX = Random.Range(1.2f, 2.2f);
+            _targetPosition = new Vector2(transform.position.x + (randomDirX * randomDistX), transform.position.y);
+        }
+        else if (transform.position.x == _targetPosition.x && _targetPosition.x != GameManager.instance._treeRef.transform.position.x)
+            _targetPosition = new Vector2(GameManager.instance._treeRef.transform.position.x, transform.position.y);
+        _moveDirection = (_targetPosition.x - transform.position.x > 0 ? Vector2.right : Vector2.left);
         transform.position = Vector2.MoveTowards(transform.position, new Vector2(_targetPosition.x, transform.position.y), moveVelocity * Time.deltaTime);
     }
 

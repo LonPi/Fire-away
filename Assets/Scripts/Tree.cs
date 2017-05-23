@@ -17,6 +17,5 @@ public class Tree : MonoBehaviour {
     public void TakeDamage(float damage)
     {
         hitPoints -= damage;
-        Debug.Log(hitPoints);
     }
 }

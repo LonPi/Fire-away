@@ -32,7 +32,17 @@ public class FireballSpell {
 
     public bool CanCast()
     {
-        return timer <= 0f && (Time.time - lastInputTime >= inputDelay);
+        bool blinkDelayOver = true;
+        if (SpellManager.BlinkInfo.castedBlinkPreviously)
+            blinkDelayOver = false;
+        // enforce delay in spell casting after blink
+        if (!blinkDelayOver &&
+            (Time.time - SpellManager.BlinkInfo.castedBlinkTimestamp >= SpellManager.BlinkInfo.SPELL_CAST_DELAY_AFTER_BLINK))
+        {
+            blinkDelayOver = true;
+            SpellManager.BlinkInfo.Reset();
+        }
+        return timer <= 0f && (Time.time - lastInputTime >= inputDelay) && blinkDelayOver;
     }
 
     public bool Cast(Player player)
@@ -40,13 +50,12 @@ public class FireballSpell {
         if (!CanCast())
             return false;
 
-        var _state = player.Controller.state;
         Vector2 spriteSize = player.spriteSize;
         Transform _transform = player.transform;
         float offset_x = player.isFacingRight ? spriteSize.y / 2 : -1 * spriteSize.y / 2;
         Vector2 spawnPosition = new Vector2(_transform.position.x + offset_x, _transform.position.y);
         GameObject gameObj = GameObject.Instantiate(FireballPrefab, spawnPosition, Quaternion.identity, _transform);
-        gameObj.GetComponent<Fireball>().SetParams(moveSpeed, damage, travelDistance, player.isFacingRight ? 1: -1);
+        gameObj.GetComponent<Fireball>().SetParams(moveSpeed, damage, travelDistance);
         // cooldown active
         timer = cooldown;
         // record last input time

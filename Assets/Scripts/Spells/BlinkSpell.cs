@@ -43,6 +43,9 @@ public class BlinkSpell {
         timer = cooldown;
         // record last input time
         lastInputTime = Time.time;
+        // record blink state
+        SpellManager.BlinkInfo.castedBlinkPreviously = true;
+        SpellManager.BlinkInfo.castedBlinkTimestamp = Time.time;
         return true;
     }
 

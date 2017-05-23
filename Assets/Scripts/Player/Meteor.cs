@@ -4,45 +4,37 @@ using UnityEngine;
 
 public class Meteor : MonoBehaviour {
 
-    float damage;
+    float damage, areaOfDamage;
     public Transform _transform { get { return transform; } private set { } }
-    SpriteRenderer _spriteRenderer;
     BoxCollider2D _boxCollider;
     const float damageRegisterInterval = 0.5f;
     float lastDamageTime;
 
     void Start ()
     {
-        _spriteRenderer = GetComponent<SpriteRenderer>();
         _boxCollider = GetComponent<BoxCollider2D>();
         transform.parent = null;
         Physics2D.IgnoreLayerCollision(gameObject.layer, LayerMask.NameToLayer("Friendly"));
     }
 
-    public void SetParams(float damage)
+    public void SetParams(float damage, float areaOfDamage)
     {
         this.damage = damage;
+        this.areaOfDamage = areaOfDamage;
     }
 
     private void Update()
     {
-        string frame = _spriteRenderer.sprite.name;
         // cap the damage instance per second
-        if ((Time.time - lastDamageTime >= damageRegisterInterval) && (frame == "player_UltFx3" || frame == "player_UltFx4"))
-        {
+        if ((Time.time - lastDamageTime >= damageRegisterInterval))
             InflictDamage();
-        }
-        if (frame == "player_UltFx5")
-        {
-            SelfDestroy();
-        }
     }
 
     void InflictDamage()
     {
         Bounds bounds = _boxCollider.bounds;
         Vector2 raycastOrigin = bounds.center;
-        float raycastDistance = bounds.size.y;
+        float raycastDistance = areaOfDamage;
         Vector2 raycastDirection = Vector2.down;
 
         RaycastHit2D[] hits = Physics2D.CircleCastAll(raycastOrigin, raycastDistance, raycastDirection, raycastDistance, 1 << LayerMask.NameToLayer("Enemy"));
@@ -57,9 +49,9 @@ public class Meteor : MonoBehaviour {
         lastDamageTime = Time.time;
     }
 
-
-    void SelfDestroy()
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        Destroy(gameObject,1f);
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Collision"))
+            Destroy(gameObject, 0.5f);
     }
 }
