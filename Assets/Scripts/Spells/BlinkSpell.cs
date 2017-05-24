@@ -25,6 +25,8 @@ public class BlinkSpell {
         if (timer <= 0f) timer = 0f;
     }
 
+    public float GetCooldownTimer() { return timer; }
+
     public bool CanCast()
     {
         return timer <= 0f && (Time.time - lastInputTime >= inputDelay);

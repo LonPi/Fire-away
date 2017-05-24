@@ -27,6 +27,7 @@ public class MeleeSpell {
         if (timer <= 0f) timer = 0f;
     }
 
+    public float GetCooldownTimer() { return timer; }
     public bool CanCast()
     {
         bool blinkDelayOver = true;
@@ -52,7 +53,7 @@ public class MeleeSpell {
         float raycastDistance = _spriteSize.x / 2 + range;
         // circle cast downwards if player is jumping+melee
         raycastDirection = !player.Controller.collisionInfo.below ? Vector2.down : raycastDirection;
-        raycastDistance = _spriteSize.y + range;
+        if (raycastDirection == Vector2.down) raycastDistance = _spriteSize.y + range;
         Vector2 raycastOrigin = player.transform.position;
         RaycastHit2D[] hits = Physics2D.CircleCastAll(raycastOrigin, raycastDistance, raycastDirection, raycastDistance+_spriteSize.y/2, 1 << LayerMask.NameToLayer("Enemy"));
         foreach (RaycastHit2D hit in hits)

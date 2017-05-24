@@ -32,6 +32,8 @@ public class MeteorSpell {
         if (timer <= 0f) timer = 0f;
     }
 
+    public float GetCooldownTimer() { return timer; }
+
     public bool CanCast()
     {
         bool blinkDelayOver = true;

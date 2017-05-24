@@ -30,6 +30,8 @@ public class FireballSpell {
         if (timer <= 0f) timer = 0f;
     }
 
+    public float GetCooldownTimer() { return timer; }
+
     public bool CanCast()
     {
         bool blinkDelayOver = true;
