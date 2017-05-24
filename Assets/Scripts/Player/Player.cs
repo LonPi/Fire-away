@@ -11,6 +11,7 @@ public class Player : MonoBehaviour {
     public Transform _transform { get { return transform; } private set { } }
     public Vector2 spriteSize { get; private set; }
     public bool isFacingRight { get; private set; }
+    public int killCount { get; private set; }
 
     [SerializeField]
     float 
@@ -29,6 +30,7 @@ public class Player : MonoBehaviour {
         spellManager = GetComponent<SpellManager>();
         spriteSize = new Vector2(GetComponent<SpriteRenderer>().bounds.size.x, GetComponent<SpriteRenderer>().bounds.size.y);
         _isDead = false;
+        killCount = 0;
         hitPoints = maxHitPoints;
         animator = GetComponent<Animator>();
         isFacingRight = false;
@@ -126,6 +128,12 @@ public class Player : MonoBehaviour {
             transform.localScale = _localScale;
             isFacingRight = !isFacingRight;
         }
+    }
+
+    public void IncrementKillCount()
+    {
+        this.killCount++;
+        Debug.Log(killCount);
     }
 
     public void IndicateBlink()

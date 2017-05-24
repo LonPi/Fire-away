@@ -59,10 +59,11 @@ public class Enemy : MonoBehaviour {
     public void TakeDamage(float _damage)
     {
         hitPoints -= _damage;
-        if (hitPoints <= 0)
+        if (hitPoints <= 0 && !_isDead)
         {
             _isDead = true;
             animator.SetTrigger("dead");
+            GameManager.instance._playerRef.IncrementKillCount();
             Destroy(gameObject,2);
         }
     }
