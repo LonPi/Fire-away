@@ -52,11 +52,10 @@ public class FireballSpell {
         if (!CanCast())
             return false;
 
-        Vector2 spriteSize = player.spriteSize;
-        Transform _transform = player.transform;
+        Vector2 spriteSize = player.spriteRenderer.bounds.size;
         float offset_x = player.isFacingRight ? spriteSize.y / 2 : -1 * spriteSize.y / 2;
-        Vector2 spawnPosition = new Vector2(_transform.position.x + offset_x, _transform.position.y);
-        GameObject gameObj = GameObject.Instantiate(FireballPrefab, spawnPosition, Quaternion.identity, _transform);
+        Vector2 spawnPosition = new Vector2(player.transform.position.x + offset_x, player.transform.position.y);
+        GameObject gameObj = GameObject.Instantiate(FireballPrefab, spawnPosition, Quaternion.identity, player.transform);
         gameObj.GetComponent<Fireball>().SetParams(moveSpeed, damage, travelDistance);
         // cooldown active
         timer = cooldown;

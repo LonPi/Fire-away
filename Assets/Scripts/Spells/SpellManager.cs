@@ -28,6 +28,7 @@ public class SpellManager : MonoBehaviour {
     Dictionary<string, SpellInfo> spellsData = new Dictionary<string, SpellInfo>();
     SpellInfo melee, blink, fireball, meteor;
     bool initialized = false;
+
     void Awake()
     {
         meleeSpell = new MeleeSpell(meleeDamage, meleeRange, meleeCooldown);
@@ -81,6 +82,7 @@ public class SpellManager : MonoBehaviour {
         public const float SPELL_CAST_DELAY_AFTER_BLINK = 1f;
         public static bool castedBlinkPreviously;
         public static float castedBlinkTimestamp;
+
         public static void Reset()
         {
             castedBlinkPreviously = false;

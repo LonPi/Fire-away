@@ -48,14 +48,18 @@ public class MeleeSpell {
         if (!CanCast())
             return false;
 
-        Vector2 _spriteSize = player.spriteSize;
+        Vector2 _spriteSize = player.spriteRenderer.bounds.size;
         Vector2 raycastDirection =  player.isFacingRight ? Vector2.right : Vector2.left;
-        float raycastDistance = _spriteSize.x / 2 + range;
+        float raycastDistance = range;
+        float raycastRadius = range;
         // circle cast downwards if player is jumping+melee
         raycastDirection = !player.Controller.collisionInfo.below ? Vector2.down : raycastDirection;
-        if (raycastDirection == Vector2.down) raycastDistance = _spriteSize.y + range;
+        if (raycastDirection == Vector2.down)
+        {
+            raycastDistance = 3f * player.transform.localScale.y;
+        }
         Vector2 raycastOrigin = player.transform.position;
-        RaycastHit2D[] hits = Physics2D.CircleCastAll(raycastOrigin, raycastDistance, raycastDirection, raycastDistance+_spriteSize.y/2, 1 << LayerMask.NameToLayer("Enemy"));
+        RaycastHit2D[] hits = Physics2D.CircleCastAll(raycastOrigin, raycastRadius, raycastDirection, raycastDistance, 1 << LayerMask.NameToLayer("Enemy"));
         foreach (RaycastHit2D hit in hits)
         {
             Enemy enemy = hit.collider.gameObject.GetComponent<Enemy>();

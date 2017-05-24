@@ -5,16 +5,17 @@ using UnityEngine;
 public class Meteor : MonoBehaviour {
 
     float damage, areaOfDamage;
-    public Transform _transform { get { return transform; } private set { } }
     BoxCollider2D _boxCollider;
-    const float damageRegisterInterval = 0.5f;
+    const float damageInterval = 0.5f;
     float lastDamageTime;
+    Dictionary<int, float> damagedTargets;
 
     void Start ()
     {
         _boxCollider = GetComponent<BoxCollider2D>();
         transform.parent = null;
         Physics2D.IgnoreLayerCollision(gameObject.layer, LayerMask.NameToLayer("Friendly"));
+        damagedTargets = new Dictionary<int, float>();
     }
 
     public void SetParams(float damage, float areaOfDamage)
@@ -25,9 +26,7 @@ public class Meteor : MonoBehaviour {
 
     private void Update()
     {
-        // cap the damage instance per second
-        if ((Time.time - lastDamageTime >= damageRegisterInterval))
-            InflictDamage();
+        InflictDamage();
     }
 
     void InflictDamage()
@@ -38,15 +37,25 @@ public class Meteor : MonoBehaviour {
         Vector2 raycastDirection = Vector2.down;
 
         RaycastHit2D[] hits = Physics2D.CircleCastAll(raycastOrigin, raycastDistance, raycastDirection, raycastDistance, 1 << LayerMask.NameToLayer("Enemy"));
-        foreach(RaycastHit2D hit in hits)
+        foreach (RaycastHit2D hit in hits)
         {
             Enemy enemy = hit.collider.gameObject.GetComponent<Enemy>();
-            if (enemy != null)
+            int instanceId = enemy.gameObject.GetInstanceID();
+            if (damagedTargets.ContainsKey(instanceId) && (Time.time - damagedTargets[instanceId] >= damageInterval))
             {
                 enemy.TakeDamage(damage);
+                damagedTargets[instanceId] = Time.time;
+                if (enemy._isDead)
+                    damagedTargets.Remove(instanceId);
+            }
+            else if (!damagedTargets.ContainsKey(instanceId))
+            {
+                enemy.TakeDamage(damage);
+                damagedTargets.Add(instanceId, Time.time);
+                if (enemy._isDead)
+                    damagedTargets.Remove(instanceId);
             }
         }
-        lastDamageTime = Time.time;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

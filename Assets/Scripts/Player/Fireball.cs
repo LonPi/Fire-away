@@ -11,15 +11,16 @@ public class Fireball : MonoBehaviour {
     Player player;
     Vector2 _velocity;
     Vector2 targetPosition;
-    Vector2 _spriteSize;
-    const float damageRegisterInterval = 0.5f;
-    float lastDamageTime;
+    BoxCollider2D _boxCollider;
+    const float damageInterval = 0.5f;
+    Dictionary<int, float> damagedTargets;
 
     void Start () {
         player = GetComponentInParent<Player>();
-        _spriteSize = new Vector2(GetComponent<SpriteRenderer>().bounds.size.x, GetComponent<SpriteRenderer>().bounds.size.y);
         _velocity = new Vector2(moveSpeed, 0f);
         transform.parent = null;
+        damagedTargets = new Dictionary<int, float>();
+        _boxCollider = GetComponent<BoxCollider2D>();
         if (player.isFacingRight)
             targetPosition = new Vector2(transform.position.x + travelDistance, transform.position.y);
         else
@@ -27,22 +28,17 @@ public class Fireball : MonoBehaviour {
         
     }
 
-    void Update () {
+    void Update ()
+    {
         Move();
-        // damage instance cap
-        if ((Time.time - lastDamageTime >= damageRegisterInterval))
-        {
-            InflictDamage();
-        }
+        InflictDamage();
     }
 
     void Move()
     {
         transform.position = Vector2.MoveTowards(transform.position, targetPosition, _velocity.x * Time.deltaTime);
         if ((Vector2)transform.position == targetPosition)
-        {
             Destroy(gameObject);
-        }
     }
 
     public void SetParams(float moveSpeed, float damage, float travelDistance)
@@ -55,15 +51,30 @@ public class Fireball : MonoBehaviour {
     void InflictDamage()
     {
         float raycastRadius, raycastDistance;
+        Bounds bounds = _boxCollider.bounds;
         Vector2 raycastDirection = _velocity.x < 0 ? Vector2.left : Vector2.right;
-        raycastDistance = raycastRadius = _spriteSize.x/2;
+        raycastDistance = raycastRadius = bounds.size.x / 2;
         Vector2 raycastOrigin = transform.position;
         RaycastHit2D[] hits = Physics2D.CircleCastAll(raycastOrigin, raycastRadius, raycastDirection, raycastDistance, 1 << LayerMask.NameToLayer("Enemy"));
+
         foreach (RaycastHit2D hit in hits)
         {
             Enemy enemy = hit.collider.gameObject.GetComponent<Enemy>();
-            enemy.TakeDamage(damage);
+            int instanceId = enemy.gameObject.GetInstanceID();
+            if (damagedTargets.ContainsKey(instanceId) && (Time.time - damagedTargets[instanceId] >= damageInterval))
+            {
+                enemy.TakeDamage(damage);
+                damagedTargets[instanceId] = Time.time;
+                if (enemy._isDead)
+                    damagedTargets.Remove(instanceId);
+            }
+            else if (!damagedTargets.ContainsKey(instanceId))
+            {
+                enemy.TakeDamage(damage);
+                damagedTargets.Add(instanceId, Time.time);
+                if (enemy._isDead)
+                    damagedTargets.Remove(instanceId);
+            }
         }
-        lastDamageTime = Time.time;
     }
 }

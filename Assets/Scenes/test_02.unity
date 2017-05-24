@@ -998,17 +998,22 @@ Prefab:
     - target: {fileID: 114424888384022830, guid: 2384f79793ddccf4cb0963a78b2e5e99,
         type: 2}
       propertyPath: fireballCooldown
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 114424888384022830, guid: 2384f79793ddccf4cb0963a78b2e5e99,
         type: 2}
       propertyPath: meleeRange
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 114424888384022830, guid: 2384f79793ddccf4cb0963a78b2e5e99,
         type: 2}
       propertyPath: meleeCooldown
       value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 114424888384022830, guid: 2384f79793ddccf4cb0963a78b2e5e99,
+        type: 2}
+      propertyPath: fireballDamage
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2384f79793ddccf4cb0963a78b2e5e99, type: 2}

@@ -3,31 +3,27 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour {
-    // public variables
+
     public float moveVelocity;
     public float hitPoints;
     public float damage;
-    // private variables
-    Vector2 _spriteSize;
+    public bool _isDead { get; private set; }
+
     Transform _transform { get { return transform; } }
     Vector3 _localScale { get { return transform.localScale; } }
     Vector2 _targetPosition;
     Vector2 _moveDirection;
     float lastAttackTime;
     float attackInterval = 0.5f;
-    bool _isDead;
     Animator animator;
-    bool wander;
-    bool hasArrivedTargetDestination;
+    BoxCollider2D _boxCollider;
 
 	void Start () {
         animator = GetComponent<Animator>();
-        _spriteSize = new Vector2(GetComponent<SpriteRenderer>().bounds.size.x, GetComponent<SpriteRenderer>().bounds.size.y);
+        _boxCollider = GetComponent<BoxCollider2D>();
         _targetPosition= GameManager.instance._treeRef.transform.position;
         _moveDirection = (_targetPosition.x - transform.position.x > 0 ? Vector2.right : Vector2.left);
         _isDead = false;
-        wander = false;
-        hasArrivedTargetDestination = false;
     }
 	
 	void Update () {
@@ -71,7 +67,8 @@ public class Enemy : MonoBehaviour {
     void InflictDamage()
     {
         float raycastDistance, raycastRadius;
-        raycastDistance = raycastRadius = _spriteSize.x / 2;
+        Bounds bounds = _boxCollider.bounds;
+        raycastDistance = raycastRadius = bounds.size.x / 2;
         RaycastHit2D hit = Physics2D.CircleCast(_transform.position, raycastRadius, _moveDirection, raycastDistance, 1 << LayerMask.NameToLayer("Friendly"));
         lastAttackTime = Time.time;
         if (hit)
