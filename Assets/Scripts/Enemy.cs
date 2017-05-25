@@ -8,18 +8,22 @@ public class Enemy : MonoBehaviour {
     public float hitPoints;
     public float damage;
     public bool _isDead { get; private set; }
+    public GameObject CombatTextPrefab;
+    public float expGainPerKill;
 
     Transform _transform { get { return transform; } }
     Vector3 _localScale { get { return transform.localScale; } }
     Vector2 _targetPosition;
-    Vector2 _moveDirection;
+    public Vector2 _moveDirection { get; private set; }
     float lastAttackTime;
     float attackInterval = 0.5f;
     Animator animator;
     BoxCollider2D _boxCollider;
+    Canvas combatCanvas;
 
 	void Start () {
         animator = GetComponent<Animator>();
+        combatCanvas = GetComponentInChildren<Canvas>();
         _boxCollider = GetComponent<BoxCollider2D>();
         _targetPosition= GameManager.instance._treeRef.transform.position;
         _moveDirection = (_targetPosition.x - transform.position.x > 0 ? Vector2.right : Vector2.left);
@@ -31,7 +35,6 @@ public class Enemy : MonoBehaviour {
             return;
 
         Move();
-
         if ((Time.time - lastAttackTime >= attackInterval))
             InflictDamage();
         
@@ -60,8 +63,16 @@ public class Enemy : MonoBehaviour {
             _isDead = true;
             animator.SetTrigger("dead");
             GameManager.instance._playerRef.IncrementKillCount();
+            GameManager.instance.IncrementExp(expGainPerKill);
             Destroy(gameObject,2);
         }
+    }
+
+    public void SetParams(int level)
+    {
+        this.damage = this.damage + (float)level * 0.2f;
+        this.hitPoints = this.hitPoints + (float)level * 0.3f;
+        Debug.Log(gameObject.name + "  level: " + level + " hp: " + hitPoints + " damage: " + damage);
     }
 
     void InflictDamage()
@@ -96,5 +107,12 @@ public class Enemy : MonoBehaviour {
             theScale.x *= -1;
             transform.localScale = theScale;
         }
+    }
+
+    public void CreateCombatText(Vector2 position, string fillText)
+    {
+        // instantiate text prefab
+        GameObject combatText = Instantiate(CombatTextPrefab, combatCanvas.GetComponent<RectTransform>());
+        combatText.GetComponent<CombatText>().SetParams(fillText);
     }
 }

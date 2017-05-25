@@ -63,6 +63,8 @@ public class MeleeSpell {
         foreach (RaycastHit2D hit in hits)
         {
             Enemy enemy = hit.collider.gameObject.GetComponent<Enemy>();
+            if (enemy._isDead) continue;
+            enemy.CreateCombatText(enemy.transform.position, damage.ToString());
             enemy.TakeDamage(damage);
         }
         // cooldown active

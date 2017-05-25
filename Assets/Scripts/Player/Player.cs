@@ -22,16 +22,15 @@ public class Player : MonoBehaviour {
     bool _isDead;
     Animator animator;
     
-    
 	void Start ()
     {
         Controller = GetComponent<PlayerController>();
         spellManager = GetComponent<SpellManager>();
+        animator = GetComponent<Animator>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
         _isDead = false;
         killCount = 0;
         hitPoints = maxHitPoints;
-        animator = GetComponent<Animator>();
-        spriteRenderer = GetComponent<SpriteRenderer>();
         isFacingRight = false;
     }
 
@@ -43,6 +42,7 @@ public class Player : MonoBehaviour {
         if (hitPoints <= 0 && !_isDead)
         {
             GameManager.instance.GameOver();
+            animator.SetTrigger("dead");
             _isDead = true;
         }
     }
@@ -80,6 +80,8 @@ public class Player : MonoBehaviour {
         {
             spellManager.meleeSpell.Cast(this);
             animator.SetTrigger("melee");
+            
+            
         }
 
         if (Input.GetKey(KeyCode.W) && spellManager.blinkSpell.CanCast())
@@ -92,7 +94,6 @@ public class Player : MonoBehaviour {
 
             if (canBlink)
             {
-                Debug.Log("Can blink to " + (pressLeft ? "left" : "right"));
                 Vector2 direction = pressLeft ? Vector2.left : Vector2.right;
                 spellManager.blinkSpell.Cast(this, direction);
                 animator.SetTrigger("blink");
@@ -138,6 +139,8 @@ public class Player : MonoBehaviour {
     {
         StartCoroutine(_Blink());
     }
+
+
 
     IEnumerator _Blink()
     {

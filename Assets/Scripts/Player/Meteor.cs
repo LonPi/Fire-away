@@ -41,9 +41,12 @@ public class Meteor : MonoBehaviour {
         {
             Enemy enemy = hit.collider.gameObject.GetComponent<Enemy>();
             int instanceId = enemy.gameObject.GetInstanceID();
+            if (enemy._isDead) continue;
+
             if (damagedTargets.ContainsKey(instanceId) && (Time.time - damagedTargets[instanceId] >= damageInterval))
             {
                 enemy.TakeDamage(damage);
+                enemy.CreateCombatText(enemy.transform.position, damage.ToString());
                 damagedTargets[instanceId] = Time.time;
                 if (enemy._isDead)
                     damagedTargets.Remove(instanceId);
@@ -51,6 +54,7 @@ public class Meteor : MonoBehaviour {
             else if (!damagedTargets.ContainsKey(instanceId))
             {
                 enemy.TakeDamage(damage);
+                enemy.CreateCombatText(enemy.transform.position, damage.ToString());
                 damagedTargets.Add(instanceId, Time.time);
                 if (enemy._isDead)
                     damagedTargets.Remove(instanceId);
