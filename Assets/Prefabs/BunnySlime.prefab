@@ -136,9 +136,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2f4508dde1c7344690429f4393abfe1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveVelocity: 6
-  hitPoints: 10
-  damage: 1
+  moveVelocity: 5
+  hitPoints: 20
+  damage: 10
   CombatTextPrefab: {fileID: 1261946823246336, guid: 8fda40639d0c2f3418051f4e9bddf429,
     type: 2}
   expGainPerKill: 20

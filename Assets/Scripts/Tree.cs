@@ -11,25 +11,39 @@ public class Tree : MonoBehaviour {
     SpriteRenderer _spriteRenderer;
     bool _isDead;
     bool _isTakingDamage;
+    bool _lowHP;
+
+    public AudioClip treeLowSFX;
+    public AudioClip treeDeadSFX;
 
     void Start () {
         hitPoints = maxHitPoints;
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _isDead = false;
+        _lowHP = false;
         StartCoroutine(_IndicateBeingDamaged());
     }
 	
 	void Update () {
+
+        if (hitPoints <= 10 && !_lowHP)
+        {
+            _lowHP = true;
+            SoundManager.instance.PlaySingle(treeLowSFX);
+        }
+
         if (hitPoints <= 0 && !_isDead)
         {
             GameManager.instance.GameOver();
             _isDead = true;
+            SoundManager.instance.PlaySingle(treeDeadSFX);
         }
     }
 
     public void TakeDamage(float damage)
     {
-        hitPoints -= damage;
+        if (hitPoints <= 0) hitPoints = 0;
+        else hitPoints -= damage;
         StartCoroutine(_IndicateBeingDamaged());
         float percentHitpointsLeft = hitPoints / maxHitPoints;
 

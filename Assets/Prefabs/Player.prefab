@@ -120,17 +120,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   meleeDamage: 20
-  meleeRange: 0
-  meleeCooldown: 0
+  meleeRange: 1
+  meleeCooldown: 0.3
   blinkRange: 8
   blinkCooldown: 2
-  fireballDamage: 1
+  fireballDamage: 30
   fireballMoveSpeed: 12
   fireballTravelDistance: 15
   fireballCooldown: 3
-  meteorStartHeight: 10
+  meteorInitialFallingHeight: 9
+  meteorCastRange: 5
+  meteorAreaOfDamage: 5
   meteorDamage: 80
-  meteorCooldown: 5
+  meteorCooldown: 10
   FireballPrefab: {fileID: 1322327994715662, guid: 13bc3afb90d47264d879f81f189150ba,
     type: 2}
   MeteorPrefab: {fileID: 1687449914850802, guid: 73f3fd35271e8aa42b0b0c3d55c8838b,
@@ -157,7 +159,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de1cdd018b458c945927fd47ded0f4df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHitPoints: 100
+  maxHitPoints: 200
+  blinkSFX: {fileID: 8300000, guid: 8eca4529c6b1fd24e9a6cbbfc1c35764, type: 3}
+  meleeSFX: {fileID: 8300000, guid: 7cfc164093445b74eb055e754856d58f, type: 3}
+  rangeSFX: {fileID: 8300000, guid: 4ddda1d5513b9c44fb5b105f448dce66, type: 3}
+  ultiSFX: {fileID: 8300000, guid: f5ec764843ad7dd4dbf25ea598523a1c, type: 3}
+  lowHpSFX: {fileID: 8300000, guid: b37d1688d9c05a944bbde5c50e0c6539, type: 3}
+  deadSFX: {fileID: 8300000, guid: bf44ba0e53d73a949a58d1b554fe994e, type: 3}
+  damagedSFX: {fileID: 8300000, guid: 469d2106707e18a4baf7131123ccc454, type: 3}
+  killSlimeSFX: {fileID: 8300000, guid: aea115df98a92014c88331a58d3d0225, type: 3}
   gravity: -20
   moveVelocity: 5
   jumpVelocity: 10
@@ -192,7 +202,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 84e25e90ba0418e45a3545eca462d93c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

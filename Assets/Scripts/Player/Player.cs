@@ -10,7 +10,7 @@ public class Player : MonoBehaviour {
     public PlayerController Controller { get; private set; }
     public bool isFacingRight { get; private set; }
     public int killCount { get; private set; }
-    public SpriteRenderer spriteRenderer { get; private set; }
+    public SpriteRenderer spriteRenderer { get; private set; }   
 
     [SerializeField]
     float 
@@ -20,6 +20,7 @@ public class Player : MonoBehaviour {
     SpellManager spellManager;
     Vector2 _velocity;
     bool _isDead;
+    bool _lowHP;
     Animator animator;
     
 	void Start ()
@@ -29,6 +30,7 @@ public class Player : MonoBehaviour {
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         _isDead = false;
+        _lowHP = false;
         killCount = 0;
         hitPoints = maxHitPoints;
         isFacingRight = false;
@@ -36,13 +38,21 @@ public class Player : MonoBehaviour {
 
     private void Update()
     {
+        if (_isDead) return;
         HandleMovement();
         HandleSpells();
-        
+
+        if (hitPoints <= 10 && !_lowHP)
+        {
+            SoundManager.instance.PlaySingle(SoundManager.instance.lowHpSFX);
+            _lowHP = true;
+        }
+
         if (hitPoints <= 0 && !_isDead)
         {
             GameManager.instance.GameOver();
             animator.SetTrigger("dead");
+            SoundManager.instance.PlaySingle(SoundManager.instance.deadSFX);
             _isDead = true;
         }
     }
@@ -80,8 +90,7 @@ public class Player : MonoBehaviour {
         {
             spellManager.meleeSpell.Cast(this);
             animator.SetTrigger("melee");
-            
-            
+            SoundManager.instance.PlaySingle(SoundManager.instance.meleeSFX);            
         }
 
         if (Input.GetKey(KeyCode.W) && spellManager.blinkSpell.CanCast())
@@ -97,6 +106,7 @@ public class Player : MonoBehaviour {
                 Vector2 direction = pressLeft ? Vector2.left : Vector2.right;
                 spellManager.blinkSpell.Cast(this, direction);
                 animator.SetTrigger("blink");
+                SoundManager.instance.PlaySingle(SoundManager.instance.blinkSFX);
             }
         }
 
@@ -104,18 +114,22 @@ public class Player : MonoBehaviour {
         {
             spellManager.fireballSpell.Cast(this);
             animator.SetTrigger("fireball");
+            SoundManager.instance.PlaySingle(SoundManager.instance.rangeSFX);
         }
 
         if (Input.GetKey(KeyCode.R) && spellManager.meteorSpell.CanCast())
         {
             spellManager.meteorSpell.Cast(this);
             animator.SetTrigger("ulti");
+            SoundManager.instance.PlaySingle(SoundManager.instance.ultiSFX);
         }
     }
 
     public void TakeDamage(float damage)
     {
-        hitPoints -= damage;
+        if (hitPoints <= 0) hitPoints = 0;
+        else hitPoints -= damage;
+        SoundManager.instance.PlaySingle(SoundManager.instance.damagedSFX);
     }
 
     void Flip()
@@ -133,6 +147,7 @@ public class Player : MonoBehaviour {
     public void IncrementKillCount()
     {
         this.killCount++;
+        SoundManager.instance.PlaySingle(SoundManager.instance.killSlimeSFX);
     }
 
     public void IndicateBlink()
@@ -140,7 +155,14 @@ public class Player : MonoBehaviour {
         StartCoroutine(_Blink());
     }
 
-
+    public void LifeSteal(float amount)
+    {
+        if (hitPoints <= maxHitPoints)
+        {
+            if (hitPoints + amount > maxHitPoints) hitPoints = maxHitPoints;
+            else hitPoints += amount;
+        }
+    }
 
     IEnumerator _Blink()
     {

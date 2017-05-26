@@ -7,8 +7,8 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour {
 
     public static GameManager instance = null;
-    public bool IsRestartingLevel;
     public GameObject[] Enemies;
+    public GameObject testText;
     public Transform[] SpawnPositions;
     public float spawnFrequency;
     public Player _playerRef { get; private set; }
@@ -17,9 +17,11 @@ public class GameManager : MonoBehaviour {
     public int currentLevel { get; private set; }
     public float currentExp { get; private set; }
     public float expRequiredToCompleteLevel { get; private set; }
-
+    public AudioClip levelUpSFX;
+    //public AudioClip bossSpawnSFX;
+    FadingText _gameLostText;
     Vector2 curSpawnPosition;
-    float fadeTime = 0.5f;
+    float fadeTime = 2.0f;
 
     void Awake()
     {
@@ -30,16 +32,12 @@ public class GameManager : MonoBehaviour {
         DontDestroyOnLoad(gameObject);
     }
 
-    void Start () {
-        InitReferences();
-        ResetProgression();
-    }
-
     void InitReferences()
     {
         _playerRef = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         _treeRef = GameObject.FindGameObjectWithTag("Tree").GetComponent<Tree>();
         _cameraRef = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+        _gameLostText = GameObject.Find("GameLost").GetComponent<FadingText>();
     }
 
     void ResetProgression()
@@ -52,26 +50,27 @@ public class GameManager : MonoBehaviour {
     public void GameOver()
     {
         StopAllCoroutines();
+        _gameLostText.ShowText();
         StartCoroutine(_ReloadLevel());
     }
 
     public void IncrementExp(float exp)
     {
         this.currentExp += exp;
-        Debug.Log("gained " + exp + " currrent exp: " + currentExp);
+        //Debug.Log("gained " + exp + " currrent exp: " + currentExp);
         if (currentExp >= expRequiredToCompleteLevel)
         {
             currentLevel++;
             currentExp = 0;
             expRequiredToCompleteLevel += expRequiredToCompleteLevel * 0.2f;
             expRequiredToCompleteLevel =  Mathf.Floor(expRequiredToCompleteLevel);
+            SoundManager.instance.PlaySingle(levelUpSFX);
         }
     }
 
     IEnumerator _ReloadLevel()
     {
         yield return new WaitForSeconds(fadeTime);
-        IsRestartingLevel = true;
         fadeTime = GetComponent<Fading>().BeginFade(1);
         yield return new WaitForSeconds(fadeTime);
         Scene loadedLevel = SceneManager.GetActiveScene();

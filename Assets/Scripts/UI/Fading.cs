@@ -41,5 +41,6 @@ public class Fading : MonoBehaviour
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         BeginFade(-1);
+        
     }
 }

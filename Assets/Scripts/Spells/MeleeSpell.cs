@@ -66,6 +66,7 @@ public class MeleeSpell {
             if (enemy._isDead) continue;
             enemy.CreateCombatText(enemy.transform.position, damage.ToString());
             enemy.TakeDamage(damage);
+            player.LifeSteal(damage / 10);
         }
         // cooldown active
         timer = cooldown;

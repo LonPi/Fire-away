@@ -79,7 +79,7 @@ public class SpellManager : MonoBehaviour {
 
     public struct BlinkInfo
     {
-        public const float SPELL_CAST_DELAY_AFTER_BLINK = 1f;
+        public const float SPELL_CAST_DELAY_AFTER_BLINK = 0.5f;
         public static bool castedBlinkPreviously;
         public static float castedBlinkTimestamp;
 

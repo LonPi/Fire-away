@@ -70,9 +70,9 @@ public class Enemy : MonoBehaviour {
 
     public void SetParams(int level)
     {
-        this.damage = this.damage + (float)level * 0.2f;
-        this.hitPoints = this.hitPoints + (float)level * 0.3f;
-        Debug.Log(gameObject.name + "  level: " + level + " hp: " + hitPoints + " damage: " + damage);
+        this.damage = this.damage + (float)level * 0.4f;
+        this.hitPoints = this.hitPoints + (float)level * 0.6f;
+        //Debug.Log(gameObject.name + "  level: " + level + " hp: " + hitPoints + " damage: " + damage);
     }
 
     void InflictDamage()

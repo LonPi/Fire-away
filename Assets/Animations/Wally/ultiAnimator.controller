@@ -28,7 +28,7 @@ AnimatorState:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: Spell
-  m_Speed: 0.8
+  m_Speed: 0.4
   m_CycleOffset: 0
   m_Transitions: []
   m_StateMachineBehaviours: []
@@ -39,7 +39,7 @@ AnimatorState:
   m_SpeedParameterActive: 0
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 7358c0aa62bf45b4b8aaf48a5d3f4421, type: 2}
+  m_Motion: {fileID: 7400000, guid: df4c744bfbff4404087f44aec3bc9d57, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
