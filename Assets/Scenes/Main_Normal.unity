@@ -432,7 +432,6 @@ MonoBehaviour:
   - {fileID: 671388317}
   - {fileID: 404029235}
   spawnFrequency: 1
-  levelUpSFX: {fileID: 8300000, guid: 572d2747392aeb243956b5897496ea40, type: 3}
 --- !u!4 &68830019
 Transform:
   m_ObjectHideFlags: 0
@@ -1110,7 +1109,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4924917910182348, guid: 2384f79793ddccf4cb0963a78b2e5e99, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 2.21
+      value: 2.39
       objectReference: {fileID: 0}
     - target: {fileID: 4924917910182348, guid: 2384f79793ddccf4cb0963a78b2e5e99, type: 2}
       propertyPath: m_LocalPosition.y
@@ -1144,6 +1143,16 @@ Prefab:
         type: 2}
       propertyPath: maxHitPoints
       value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 114424888384022830, guid: 2384f79793ddccf4cb0963a78b2e5e99,
+        type: 2}
+      propertyPath: meteorDamage
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 114424888384022830, guid: 2384f79793ddccf4cb0963a78b2e5e99,
+        type: 2}
+      propertyPath: meteorCooldown
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2384f79793ddccf4cb0963a78b2e5e99, type: 2}
@@ -1755,6 +1764,7 @@ MonoBehaviour:
   deadSFX: {fileID: 8300000, guid: bf44ba0e53d73a949a58d1b554fe994e, type: 3}
   damagedSFX: {fileID: 8300000, guid: 469d2106707e18a4baf7131123ccc454, type: 3}
   killSlimeSFX: {fileID: 8300000, guid: aea115df98a92014c88331a58d3d0225, type: 3}
+  levelUpSFX: {fileID: 8300000, guid: 572d2747392aeb243956b5897496ea40, type: 3}
   lowPitchRange: 0.95
   highPitchRange: 1.05
 --- !u!4 &778786942
@@ -3343,7 +3353,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 0.2
+  m_Volume: 0.29
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -3448,7 +3458,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 94.899994, y: -35.600006}
+  m_AnchoredPosition: {x: 94.900024, y: -35.600006}
   m_SizeDelta: {x: 731.2, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1762816405
