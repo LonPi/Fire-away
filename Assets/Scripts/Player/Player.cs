@@ -38,7 +38,13 @@ public class Player : MonoBehaviour {
 
     private void Update()
     {
-        if (_isDead) return;
+        if (_isDead)
+        {
+            _velocity.x = 0f;
+            _velocity.y += gravity * Time.deltaTime;
+            Controller.Move(ref _velocity);
+            return;
+        }
         HandleMovement();
         HandleSpells();
 
@@ -50,10 +56,10 @@ public class Player : MonoBehaviour {
 
         if (hitPoints <= 0 && !_isDead)
         {
-            GameManager.instance.GameOver();
             animator.SetTrigger("dead");
             SoundManager.instance.PlaySingle(SoundManager.instance.deadSFX);
             _isDead = true;
+            GameManager.instance.GameOver();
         }
     }
 

@@ -17,8 +17,6 @@ public class GameManager : MonoBehaviour {
     public int currentLevel { get; private set; }
     public float currentExp { get; private set; }
     public float expRequiredToCompleteLevel { get; private set; }
-    public AudioClip levelUpSFX;
-    //public AudioClip bossSpawnSFX;
     FadingText _gameLostText;
     Vector2 curSpawnPosition;
     float fadeTime = 2.0f;
@@ -64,7 +62,7 @@ public class GameManager : MonoBehaviour {
             currentExp = 0;
             expRequiredToCompleteLevel += expRequiredToCompleteLevel * 0.2f;
             expRequiredToCompleteLevel =  Mathf.Floor(expRequiredToCompleteLevel);
-            SoundManager.instance.PlaySingle(levelUpSFX);
+            SoundManager.instance.PlaySingle(SoundManager.instance.levelUpSFX);
         }
     }
 

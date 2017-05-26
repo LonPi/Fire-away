@@ -11,6 +11,7 @@ public class MeleeSpell {
         inputDelay,
         lastInputTime,
         timer;
+    float upwardVelocity = 15f;
 
     public MeleeSpell(float damage, float range, float cooldown)
     {
@@ -65,7 +66,7 @@ public class MeleeSpell {
             Enemy enemy = hit.collider.gameObject.GetComponent<Enemy>();
             if (enemy._isDead) continue;
             enemy.CreateCombatText(enemy.transform.position, damage.ToString());
-            enemy.TakeDamage(damage);
+            enemy.TakeDamage(damage, upwardVelocity, player.isFacingRight ? 1: -1);
             player.LifeSteal(damage / 10);
         }
         // cooldown active

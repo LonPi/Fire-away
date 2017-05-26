@@ -5,6 +5,7 @@ using UnityEngine;
 public class Meteor : MonoBehaviour {
 
     float damage, areaOfDamage;
+    float upwardVelocity = 15f;
     BoxCollider2D _boxCollider;
     const float damageInterval = 0.5f;
     float lastDamageTime;
@@ -45,7 +46,7 @@ public class Meteor : MonoBehaviour {
 
             if (damagedTargets.ContainsKey(instanceId) && (Time.time - damagedTargets[instanceId] >= damageInterval))
             {
-                enemy.TakeDamage(damage);
+                enemy.TakeDamage(damage, upwardVelocity, enemy._moveDirection.x * -1);
                 enemy.CreateCombatText(enemy.transform.position, damage.ToString());
                 damagedTargets[instanceId] = Time.time;
                 if (enemy._isDead)
@@ -53,7 +54,7 @@ public class Meteor : MonoBehaviour {
             }
             else if (!damagedTargets.ContainsKey(instanceId))
             {
-                enemy.TakeDamage(damage);
+                enemy.TakeDamage(damage, upwardVelocity, enemy._moveDirection.x * -1);
                 enemy.CreateCombatText(enemy.transform.position, damage.ToString());
                 damagedTargets.Add(instanceId, Time.time);
                 if (enemy._isDead)

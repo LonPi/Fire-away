@@ -21,7 +21,7 @@ public class Tree : MonoBehaviour {
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _isDead = false;
         _lowHP = false;
-        StartCoroutine(_IndicateBeingDamaged());
+        
     }
 	
 	void Update () {

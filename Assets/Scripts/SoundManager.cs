@@ -13,6 +13,8 @@ public class SoundManager : MonoBehaviour
     public AudioClip deadSFX;
     public AudioClip damagedSFX;
     public AudioClip killSlimeSFX;
+    public AudioClip levelUpSFX;
+
     public static SoundManager instance = null;       
     public float lowPitchRange = 0.95f;              
     public float highPitchRange = 1.05f;            

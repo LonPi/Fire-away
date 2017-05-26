@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(EnemyController))]
 public class Enemy : MonoBehaviour {
 
     public float moveVelocity;
@@ -19,45 +20,97 @@ public class Enemy : MonoBehaviour {
     float attackInterval = 0.5f;
     Animator animator;
     BoxCollider2D _boxCollider;
+    EnemyController _controller;
     Canvas combatCanvas;
+    Vector2 _velocity;
+    float gravity = -20f;
+    bool kinematicMotionEnabled;
 
 	void Start () {
         animator = GetComponent<Animator>();
         combatCanvas = GetComponentInChildren<Canvas>();
+        _controller = GetComponent<EnemyController>();
         _boxCollider = GetComponent<BoxCollider2D>();
         _targetPosition= GameManager.instance._treeRef.transform.position;
         _moveDirection = (_targetPosition.x - transform.position.x > 0 ? Vector2.right : Vector2.left);
         _isDead = false;
+        kinematicMotionEnabled = false;
+        _velocity = new Vector2(moveVelocity * _moveDirection.x, 0f);
     }
 	
 	void Update () {
         if (_isDead)
+        {
+            ApplyGravity();
             return;
+        }
 
-        Move();
+        if (kinematicMotionEnabled)
+        {
+            ApplyMotion();
+        }
+        else MoveTowardsTarget();
+
         if ((Time.time - lastAttackTime >= attackInterval))
             InflictDamage();
         
     }
 
-    void Move()
+    void MoveTowardsTarget()
     {
+        if (_controller.collisionInfo.below)
+        {
+            _velocity.y = 0f;
+        }
+
+        // X movement
         Flip();
+        // if has reached the target position, change target to nearby location
         if (transform.position.x == _targetPosition.x && _targetPosition.x == GameManager.instance._treeRef.transform.position.x)
         {
             float randomDirX = Random.Range(-1.99f, 1.99f);
             float randomDistX = Random.Range(1.2f, 2.2f);
             _targetPosition = new Vector2(transform.position.x + (randomDirX * randomDistX), transform.position.y);
         }
+        // otherwise move to target position
         else if (transform.position.x == _targetPosition.x && _targetPosition.x != GameManager.instance._treeRef.transform.position.x)
             _targetPosition = new Vector2(GameManager.instance._treeRef.transform.position.x, transform.position.y);
         _moveDirection = (_targetPosition.x - transform.position.x > 0 ? Vector2.right : Vector2.left);
         transform.position = Vector2.MoveTowards(transform.position, new Vector2(_targetPosition.x, transform.position.y), moveVelocity * Time.deltaTime);
+
+        // Y movement (gravity)
+        ApplyGravity();
     }
 
-    public void TakeDamage(float _damage)
+    void ApplyMotion()
+    {
+        ApplyGravity();
+        transform.Translate(new Vector2(_velocity.x*Time.deltaTime, 0f));
+
+        if (_controller.collisionInfo.below)
+            kinematicMotionEnabled = false;
+    }
+
+    void ApplyGravity()
+    {
+        _velocity.y += gravity * Time.deltaTime;
+        float deltaMovementY = _velocity.y * Time.deltaTime;
+        _controller.MoveYAxis(ref deltaMovementY);
+    }
+
+    public void TakeDamage(float _damage, float upwardVelocity, float directionFrom)
     {
         hitPoints -= _damage;
+        if (!kinematicMotionEnabled)
+        {
+            _velocity.y = upwardVelocity;
+            if (Mathf.Sign(directionFrom) != Mathf.Sign(_velocity.x))
+            {
+                _velocity.x *= -1;
+            }
+            kinematicMotionEnabled = true;
+        }
+
         if (hitPoints <= 0 && !_isDead)
         {
             _isDead = true;

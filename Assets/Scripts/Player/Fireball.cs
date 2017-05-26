@@ -13,7 +13,9 @@ public class Fireball : MonoBehaviour {
     Vector2 targetPosition;
     BoxCollider2D _boxCollider;
     const float damageInterval = 0.5f;
+    float upwardVelocity = 10f;
     Dictionary<int, float> damagedTargets;
+    float _moveDirection;
 
     void Start () {
         player = GetComponentInParent<Player>();
@@ -25,7 +27,7 @@ public class Fireball : MonoBehaviour {
             targetPosition = new Vector2(transform.position.x + travelDistance, transform.position.y);
         else
             targetPosition = new Vector2(transform.position.x - travelDistance, transform.position.y);
-        
+        _moveDirection = (transform.position.x - targetPosition.x > 0) ? -1f : 1f;
     }
 
     void Update ()
@@ -65,7 +67,7 @@ public class Fireball : MonoBehaviour {
 
             if (damagedTargets.ContainsKey(instanceId) && (Time.time - damagedTargets[instanceId] >= damageInterval))
             {
-                enemy.TakeDamage(damage);
+                enemy.TakeDamage(damage, upwardVelocity, _moveDirection);
                 enemy.CreateCombatText(enemy.transform.position, damage.ToString());
                 damagedTargets[instanceId] = Time.time;
                 if (enemy._isDead)
@@ -73,7 +75,7 @@ public class Fireball : MonoBehaviour {
             }
             else if (!damagedTargets.ContainsKey(instanceId))
             {
-                enemy.TakeDamage(damage);
+                enemy.TakeDamage(damage, upwardVelocity, _moveDirection);
                 enemy.CreateCombatText(enemy.transform.position, damage.ToString());
                 damagedTargets.Add(instanceId, Time.time);
                 if (enemy._isDead)
