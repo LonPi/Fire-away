@@ -29,14 +29,14 @@ public class Tree : MonoBehaviour {
         if (hitPoints <= 10 && !_lowHP)
         {
             _lowHP = true;
-            SoundManager.instance.PlaySingle(treeLowSFX);
+            SoundManager.instance.TreePlaySingle(SoundManager.instance.treeLowSFX);
         }
 
         if (hitPoints <= 0 && !_isDead)
         {
             GameManager.instance.GameOver();
             _isDead = true;
-            SoundManager.instance.PlaySingle(treeDeadSFX);
+            SoundManager.instance.TreePlaySingle(SoundManager.instance.treeDeadSFX);
         }
     }
 

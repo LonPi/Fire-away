@@ -20,7 +20,7 @@ public class volumeMute : MonoBehaviour {
 
     private void Update()
     {
-        if (Input.GetKey(KeyCode.M))
+        if (Input.GetKeyDown(KeyCode.M))
         {
             TaskOnClick();
         }

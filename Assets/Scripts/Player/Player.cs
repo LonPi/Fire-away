@@ -50,14 +50,14 @@ public class Player : MonoBehaviour {
 
         if (hitPoints <= 10 && !_lowHP)
         {
-            SoundManager.instance.PlaySingle(SoundManager.instance.lowHpSFX);
+            SoundManager.instance.PlayerPlaySingle(SoundManager.instance.lowHpSFX);
             _lowHP = true;
         }
 
         if (hitPoints <= 0 && !_isDead)
         {
             animator.SetTrigger("dead");
-            SoundManager.instance.PlaySingle(SoundManager.instance.deadSFX);
+            SoundManager.instance.PlayerPlaySingle(SoundManager.instance.deadSFX);
             _isDead = true;
             GameManager.instance.GameOver();
         }
@@ -96,7 +96,7 @@ public class Player : MonoBehaviour {
         {
             spellManager.meleeSpell.Cast(this);
             animator.SetTrigger("melee");
-            SoundManager.instance.PlaySingle(SoundManager.instance.meleeSFX);            
+            SoundManager.instance.SpellPlaySingle(SoundManager.instance.meleeSFX);            
         }
 
         if (Input.GetKey(KeyCode.W) && spellManager.blinkSpell.CanCast())
@@ -112,7 +112,7 @@ public class Player : MonoBehaviour {
                 Vector2 direction = pressLeft ? Vector2.left : Vector2.right;
                 spellManager.blinkSpell.Cast(this, direction);
                 animator.SetTrigger("blink");
-                SoundManager.instance.PlaySingle(SoundManager.instance.blinkSFX);
+                SoundManager.instance.SpellPlaySingle(SoundManager.instance.blinkSFX);
             }
         }
 
@@ -120,14 +120,14 @@ public class Player : MonoBehaviour {
         {
             spellManager.fireballSpell.Cast(this);
             animator.SetTrigger("fireball");
-            SoundManager.instance.PlaySingle(SoundManager.instance.rangeSFX);
+            SoundManager.instance.FireballPlaySingle(SoundManager.instance.rangeSFX);
         }
 
         if (Input.GetKey(KeyCode.R) && spellManager.meteorSpell.CanCast())
         {
             spellManager.meteorSpell.Cast(this);
             animator.SetTrigger("ulti");
-            SoundManager.instance.PlaySingle(SoundManager.instance.ultiSFX);
+            SoundManager.instance.UltiPlaySingle(SoundManager.instance.ultiSFX);
         }
     }
 
@@ -135,7 +135,7 @@ public class Player : MonoBehaviour {
     {
         if (hitPoints <= 0) hitPoints = 0;
         else hitPoints -= damage;
-        SoundManager.instance.PlaySingle(SoundManager.instance.damagedSFX);
+        SoundManager.instance.PlayerPlaySingle(SoundManager.instance.damagedSFX);
     }
 
     void Flip()
@@ -153,7 +153,7 @@ public class Player : MonoBehaviour {
     public void IncrementKillCount()
     {
         this.killCount++;
-        SoundManager.instance.PlaySingle(SoundManager.instance.killSlimeSFX);
+        SoundManager.instance.PlayerPlaySingle(SoundManager.instance.killSlimeSFX);
     }
 
     public void IndicateBlink()

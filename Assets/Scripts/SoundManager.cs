@@ -3,17 +3,25 @@ using System.Collections;
 
 public class SoundManager : MonoBehaviour
 {
-    public AudioSource efxSource;                   
-    public AudioSource musicSource;
-    public AudioClip blinkSFX;
-    public AudioClip meleeSFX;
-    public AudioClip rangeSFX;
-    public AudioClip ultiSFX;
-    public AudioClip lowHpSFX;
-    public AudioClip deadSFX;
-    public AudioClip damagedSFX;
-    public AudioClip killSlimeSFX;
-    public AudioClip levelUpSFX;
+    public AudioSource 
+        playerFxSource,
+        treeFxSource,
+        spellFxSource,
+        fireballFxSource,
+        ultiFxSource,
+        musicSource;
+    public AudioClip 
+        blinkSFX,
+        meleeSFX,
+        rangeSFX,
+        ultiSFX,
+        lowHpSFX,
+        deadSFX,
+        damagedSFX,
+        killSlimeSFX,
+        levelUpSFX,
+        treeLowSFX,
+        treeDeadSFX;
 
     public static SoundManager instance = null;       
     public float lowPitchRange = 0.95f;              
@@ -29,18 +37,63 @@ public class SoundManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    public void PlaySingle(AudioClip clip)
+    public void PlayerPlaySingle(AudioClip clip)
     {
-        efxSource.clip = clip;
-        efxSource.Play();
+        playerFxSource.clip = clip;
+        playerFxSource.Play();
     }
 
-    public void RandomizeSfx(params AudioClip[] clips)
+    public void SpellPlaySingle(AudioClip clip)
     {
-        int randomIndex = Random.Range(0, clips.Length);
-        float randomPitch = Random.Range(lowPitchRange, highPitchRange);
-        efxSource.pitch = randomPitch;
-        efxSource.clip = clips[randomIndex];
-        efxSource.Play();
+        spellFxSource.clip = clip;
+        spellFxSource.Play();
+    }
+
+    public void TreePlaySingle(AudioClip clip)
+    {
+        treeFxSource.clip = clip;
+        treeFxSource.Play();
+    }
+
+    public void PlayerPlayDelayed(AudioClip clip, float delay)
+    {
+        playerFxSource.clip = clip;
+        playerFxSource.PlayDelayed(delay);
+    }
+
+    public void SpellPlayDelayed(AudioClip clip, float delay)
+    {
+        spellFxSource.clip = clip;
+        spellFxSource.PlayDelayed(delay);
+    }
+
+    public void TreePlayDelayed(AudioClip clip, float delay)
+    {
+        treeFxSource.clip = clip;
+        treeFxSource.PlayDelayed(delay);
+    }
+
+    public void FireballPlaySingle(AudioClip clip)
+    {
+        fireballFxSource.clip = clip;
+        fireballFxSource.Play();
+    }
+
+    public void FireballPlayDelayed(AudioClip clip, float delay)
+    {
+        fireballFxSource.clip = clip;
+        fireballFxSource.PlayDelayed(delay);
+    }
+
+    public void UltiPlaySingle(AudioClip clip)
+    {
+        ultiFxSource.clip = clip;
+        ultiFxSource.Play();
+    }
+
+    public void UltiPlayDelayed(AudioClip clip, float delay)
+    {
+        ultiFxSource.clip = clip;
+        ultiFxSource.PlayDelayed(delay);
     }
 }
