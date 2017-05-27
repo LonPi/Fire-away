@@ -20,6 +20,8 @@ public class GameManager : MonoBehaviour {
 
     Vector2 curSpawnPosition;
     float fadeTime = 2.0f;
+    public HighScore highScore;
+    bool isDisplayingHighScore;
 
     void Awake()
     {
@@ -43,12 +45,32 @@ public class GameManager : MonoBehaviour {
         currentLevel = 1;
         currentExp = 0;
         expRequiredToCompleteLevel = 200; // for level 1
+        isDisplayingHighScore = false;
+    }
+
+    void RecordHighScore()
+    {
+        if (currentLevel > highScore.maxLevel)
+            highScore.maxLevel = currentLevel;
+        if (_playerRef.killCount > highScore.maxKills)
+            highScore.maxKills = _playerRef.killCount;
+    }
+
+    public void DisplayHighScore(string name)
+    {
+        if (isDisplayingHighScore)
+            return;
+        RecordHighScore();
+        StopAllCoroutines();
+        _gameplayCanvas.OnDisplayHighScore(name);
+        _playerRef.OnDisplayHighScore();
+        _treeRef.OnDisplayHighScore();
+        isDisplayingHighScore = true;
     }
 
     public void ReloadLevel()
     {
         StopAllCoroutines();
-        _gameplayCanvas.OnRestartLevel();
         StartCoroutine(_ReloadLevel());
     }
 
@@ -68,7 +90,6 @@ public class GameManager : MonoBehaviour {
 
     IEnumerator _ReloadLevel()
     {
-        yield return new WaitForSeconds(fadeTime);
         fadeTime = GetComponent<Fading>().BeginFade(1);
         yield return new WaitForSeconds(fadeTime);
         Scene loadedLevel = SceneManager.GetActiveScene();
@@ -108,5 +129,14 @@ public class GameManager : MonoBehaviour {
         ResetProgression();
         PoolManager.instance.OnSceneLoaded();
         StartCoroutine(_SpawnEnemy());
+    }
+
+    public struct HighScore
+    {
+        public int maxKills, maxLevel;
+        public void Reset()
+        {
+            maxKills = maxLevel = 0;
+        }
     }
 }

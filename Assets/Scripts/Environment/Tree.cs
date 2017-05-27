@@ -12,7 +12,7 @@ public class Tree : MonoBehaviour {
     bool _isDead;
     bool _isTakingDamage;
     bool _lowHP;
-
+    bool inputEnabled;
     public AudioClip treeLowSFX;
     public AudioClip treeDeadSFX;
 
@@ -21,10 +21,15 @@ public class Tree : MonoBehaviour {
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _isDead = false;
         _lowHP = false;
-        
+        inputEnabled = true;
     }
 	
 	void Update () {
+
+        if (_isDead || !inputEnabled)
+        {
+            return;
+        }
 
         if (hitPoints <= 10 && !_lowHP)
         {
@@ -34,7 +39,7 @@ public class Tree : MonoBehaviour {
 
         if (hitPoints <= 0 && !_isDead)
         {
-            GameManager.instance.ReloadLevel();
+            GameManager.instance.DisplayHighScore("Tree");
             _isDead = true;
             SoundManager.instance.TreePlaySingle(SoundManager.instance.treeDeadSFX);
         }
@@ -42,8 +47,9 @@ public class Tree : MonoBehaviour {
 
     public void TakeDamage(float damage)
     {
+        hitPoints -= damage;
         if (hitPoints <= 0) hitPoints = 0;
-        else hitPoints -= damage;
+
         StartCoroutine(_IndicateBeingDamaged());
         float percentHitpointsLeft = hitPoints / maxHitPoints;
 
@@ -70,6 +76,11 @@ public class Tree : MonoBehaviour {
             Slimes[3].SetActive(true);
 
         }
+    }
+
+    public void OnDisplayHighScore()
+    {
+        inputEnabled = false;
     }
 
     IEnumerator _IndicateBeingDamaged()

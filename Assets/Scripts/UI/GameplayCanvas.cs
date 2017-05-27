@@ -6,14 +6,39 @@ using UnityEngine.UI;
 public class GameplayCanvas : MonoBehaviour {
 
     OnScreenMessage tryAgainText;
+    Text highScoreText;
+    GameObject highScoreScreen;
+    GameObject timer;
 
     void Start ()
     {
         tryAgainText = GameObject.Find("TryAgain").GetComponentInChildren<OnScreenMessage>();
+        highScoreScreen = GameObject.Find("ScoreScreen");
+        timer = transform.Find("Timer").gameObject;
+        highScoreScreen.SetActive(false);
 	}
 
-    public void OnRestartLevel()
+    public void OnDisplayHighScore(string name)
+    {
+        // disable timer
+        timer.SetActive(false);
+        StartCoroutine(_OnDisplayHighScore(name));
+    }
+
+    IEnumerator _OnDisplayHighScore(string name)
     {
         tryAgainText.ShowText();
+        yield return new WaitForSeconds(tryAgainText.lifeSpan);
+        highScoreText = highScoreScreen.GetComponentInChildren<Text>();
+        highScoreText.text =
+            (name == "Player" ? "You have died!\n" : "The guardian tree has died....\n") +
+            "max kills: " + GameManager.instance.highScore.maxKills.ToString() + "\n" +
+            "max level: " + GameManager.instance.highScore.maxLevel.ToString() + "\n";
+        highScoreScreen.SetActive(true);
+    }
+
+    public void PressRestartLevel()
+    {
+        GameManager.instance.ReloadLevel();
     }
 }

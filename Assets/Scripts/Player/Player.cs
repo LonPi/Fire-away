@@ -22,6 +22,7 @@ public class Player : MonoBehaviour {
     bool _isDead;
     bool _lowHP;
     Animator animator;
+    bool inputEnabled;
     
 	void Start ()
     {
@@ -34,6 +35,7 @@ public class Player : MonoBehaviour {
         killCount = 0;
         hitPoints = maxHitPoints;
         isFacingRight = false;
+        inputEnabled = true;
     }
 
     private void Update()
@@ -45,8 +47,12 @@ public class Player : MonoBehaviour {
             Controller.Move(ref _velocity);
             return;
         }
-        HandleMovement();
-        HandleSpells();
+
+        if (inputEnabled)
+        {
+            HandleMovement();
+            HandleSpells();
+        }
 
         if (hitPoints <= 10 && !_lowHP)
         {
@@ -59,7 +65,7 @@ public class Player : MonoBehaviour {
             animator.SetTrigger("dead");
             SoundManager.instance.PlayerPlaySingle(SoundManager.instance.deadSFX);
             _isDead = true;
-            GameManager.instance.ReloadLevel();
+            GameManager.instance.DisplayHighScore("Player");
         }
     }
 
@@ -133,9 +139,11 @@ public class Player : MonoBehaviour {
 
     public void TakeDamage(float damage)
     {
-        if (hitPoints <= 0) hitPoints = 0;
-        else hitPoints -= damage;
-        SoundManager.instance.PlayerPlaySingle(SoundManager.instance.damagedSFX);
+        hitPoints -= damage;
+        if (hitPoints <= 0)
+            hitPoints = 0;
+        if (!_isDead)
+            SoundManager.instance.PlayerPlaySingle(SoundManager.instance.damagedSFX);
     }
 
     void Flip()
@@ -168,6 +176,12 @@ public class Player : MonoBehaviour {
             if (hitPoints + amount > maxHitPoints) hitPoints = maxHitPoints;
             else hitPoints += amount;
         }
+    }
+
+    public void OnDisplayHighScore()
+    {
+        // disable input
+        inputEnabled = false;
     }
 
     IEnumerator _Blink()
