@@ -82,9 +82,12 @@ public class GameManager : MonoBehaviour {
             float spawnIndex = Random.Range(0, SpawnPositions.Length-0.01f);
             float enemyIndex = Random.Range(0, Enemies.Length - 0.01f);
             curSpawnPosition = SpawnPositions[(int)Mathf.Floor(spawnIndex)].position;
-            GameObject selectedEnemy = Enemies[(int)Mathf.Floor(enemyIndex)];
-            GameObject enemyObj = Instantiate(selectedEnemy, curSpawnPosition, Quaternion.identity);
-            enemyObj.GetComponent<Enemy>().SetParams(currentLevel);
+            if (PoolManager.instance.IsInitialized)
+            {
+                GameObject selectedEnemy = Enemies[(int)Mathf.Floor(enemyIndex)];
+                GameObject enemyObj = PoolManager.instance.GetObjectfromPool(selectedEnemy);
+                enemyObj.GetComponent<Enemy>().SetParams(currentLevel, curSpawnPosition);
+            }
             yield return new WaitForSeconds(1 / spawnFrequency);
         }
     }
@@ -103,6 +106,7 @@ public class GameManager : MonoBehaviour {
     {
         InitReferences();
         ResetProgression();
+        PoolManager.instance.OnSceneLoaded();
         StartCoroutine(_SpawnEnemy());
     }
 }

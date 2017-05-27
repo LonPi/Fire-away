@@ -25,6 +25,7 @@ public class Enemy : MonoBehaviour {
     Vector2 _velocity;
     float gravity = -20f;
     bool kinematicMotionEnabled;
+    DefaultParams _defaultParams;
 
 	void Start () {
         animator = GetComponent<Animator>();
@@ -36,6 +37,7 @@ public class Enemy : MonoBehaviour {
         _isDead = false;
         kinematicMotionEnabled = false;
         _velocity = new Vector2(moveVelocity * _moveDirection.x, 0f);
+        _defaultParams = new DefaultParams(moveVelocity, hitPoints, damage);
     }
 	
 	void Update () {
@@ -105,9 +107,7 @@ public class Enemy : MonoBehaviour {
         {
             _velocity.y = upwardVelocity;
             if (Mathf.Sign(directionFrom) != Mathf.Sign(_velocity.x))
-            {
                 _velocity.x *= -1;
-            }
             kinematicMotionEnabled = true;
         }
 
@@ -117,14 +117,23 @@ public class Enemy : MonoBehaviour {
             animator.SetTrigger("dead");
             GameManager.instance._playerRef.IncrementKillCount();
             GameManager.instance.IncrementExp(expGainPerKill);
-            Destroy(gameObject,2);
+            StartCoroutine(_ReturnToPool());
         }
     }
 
-    public void SetParams(int level)
+    public void SetParams(int level, Vector2 position)
     {
+        gameObject.SetActive(true);
+        transform.position = position;
+
+        if (_defaultParams == null)
+            _defaultParams = new DefaultParams(moveVelocity, hitPoints, damage);
+
+        _defaultParams.Reset(this);
+
         this.damage = this.damage + (float)level * 0.4f;
         this.hitPoints = this.hitPoints + (float)level * 0.6f;
+        
         //Debug.Log(gameObject.name + "  level: " + level + " hp: " + hitPoints + " damage: " + damage);
     }
 
@@ -167,5 +176,39 @@ public class Enemy : MonoBehaviour {
         // instantiate text prefab
         GameObject combatText = Instantiate(CombatTextPrefab, combatCanvas.GetComponent<RectTransform>());
         combatText.GetComponent<CombatText>().SetParams(fillText);
+    }
+
+    IEnumerator _ReturnToPool()
+    {
+        yield return new WaitForSeconds(2);
+        PoolManager.instance.ReturnObjectToPool(gameObject);
+    }
+
+    class DefaultParams
+    {
+        float
+            moveVelocity,
+            hitPoints,
+            damage;
+
+        public DefaultParams(float moveVelocity, float hitPoints, float damage)
+        {
+            this.moveVelocity = moveVelocity;
+            this.hitPoints = hitPoints;
+            this.damage = damage;
+        }
+
+        public void Reset(Enemy enemy)
+        {
+            enemy.damage = this.damage;
+            enemy.moveVelocity = this.moveVelocity;
+            enemy.hitPoints = this.hitPoints;
+            enemy._isDead = false;
+            enemy._targetPosition = GameManager.instance._treeRef.transform.position;
+            enemy._moveDirection = (enemy._targetPosition.x - enemy.transform.position.x > 0 ? Vector2.right : Vector2.left);
+            enemy._isDead = false;
+            enemy.kinematicMotionEnabled = false;
+            enemy._velocity = new Vector2(enemy.moveVelocity * enemy._moveDirection.x, 0f);
+        }
     }
 }

@@ -43,6 +43,7 @@ GameObject:
   - component: {fileID: 61298194674454226}
   - component: {fileID: 95786717209009256}
   - component: {fileID: 114145882641145472}
+  - component: {fileID: 114828980412596682}
   m_Layer: 9
   m_Name: CatSlime
   m_TagString: Untagged
@@ -191,6 +192,17 @@ MonoBehaviour:
   CombatTextPrefab: {fileID: 1261946823246336, guid: 8fda40639d0c2f3418051f4e9bddf429,
     type: 2}
   expGainPerKill: 20
+--- !u!114 &114828980412596682
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1795313975649968}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0a6719a88945e748a7ea238539c0a6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!212 &212920940716220870
 SpriteRenderer:
   m_ObjectHideFlags: 1

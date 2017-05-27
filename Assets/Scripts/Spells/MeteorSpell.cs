@@ -55,7 +55,7 @@ public class MeteorSpell {
             return false;
         float offset_x = player.isFacingRight ? castRange : -1 * castRange;
         Vector2 meteorStartPosition = new Vector2(player.transform.position.x + offset_x, initialFallingHeight);
-        GameObject gameObj = GameObject.Instantiate(MeteorPrefab, meteorStartPosition, Quaternion.identity, player.transform);
+        GameObject gameObj = GameObject.Instantiate(MeteorPrefab, meteorStartPosition, Quaternion.identity);
         gameObj.GetComponent<Meteor>().SetParams(damage, areaOfDamage);
         lastInputTime = Time.time;
         timer = cooldown;

@@ -5,16 +5,14 @@ using UnityEngine;
 public class Meteor : MonoBehaviour {
 
     float damage, areaOfDamage;
-    float upwardVelocity = 15f;
+    float upwardVelocity = 20f;
     BoxCollider2D _boxCollider;
     const float damageInterval = 0.5f;
-    float lastDamageTime;
     Dictionary<int, float> damagedTargets;
 
     void Start ()
     {
         _boxCollider = GetComponent<BoxCollider2D>();
-        transform.parent = null;
         Physics2D.IgnoreLayerCollision(gameObject.layer, LayerMask.NameToLayer("Friendly"));
         damagedTargets = new Dictionary<int, float>();
     }

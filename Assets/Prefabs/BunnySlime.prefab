@@ -25,6 +25,7 @@ GameObject:
   - component: {fileID: 61298194674454226}
   - component: {fileID: 95786717209009256}
   - component: {fileID: 114933539731286108}
+  - component: {fileID: 114142679288939738}
   m_Layer: 9
   m_Name: BunnySlime
   m_TagString: Untagged
@@ -126,6 +127,17 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &114142679288939738
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1795313975649968}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0a6719a88945e748a7ea238539c0a6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114593018950574328
 MonoBehaviour:
   m_ObjectHideFlags: 1
