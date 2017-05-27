@@ -1,17 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameplayCanvas : MonoBehaviour {
 
-    GameOverText gameOverText;
+    OnScreenMessage tryAgainText;
 
-    void Start () {
-        gameOverText = GetComponentInChildren<GameOverText>();
-	}
-	
-    public void OnGameOver()
+    void Start ()
     {
-        gameOverText.ShowText();
+        tryAgainText = GameObject.Find("TryAgain").GetComponentInChildren<OnScreenMessage>();
+	}
+
+    public void OnRestartLevel()
+    {
+        tryAgainText.ShowText();
     }
 }

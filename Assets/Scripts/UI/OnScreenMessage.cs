@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GameOverText : MonoBehaviour {
+public class OnScreenMessage : MonoBehaviour {
 
     public float lifeSpan;
     float aliveTimer;

@@ -9,7 +9,6 @@ public class Enemy : MonoBehaviour {
     public float hitPoints;
     public float damage;
     public bool _isDead { get; private set; }
-    public GameObject CombatTextPrefab;
     public float expGainPerKill;
 
     Transform _transform { get { return transform; } }
@@ -173,9 +172,7 @@ public class Enemy : MonoBehaviour {
 
     public void CreateCombatText(Vector2 position, string fillText)
     {
-        // instantiate text prefab
-        GameObject combatText = Instantiate(CombatTextPrefab, combatCanvas.GetComponent<RectTransform>());
-        combatText.GetComponent<CombatText>().SetParams(fillText);
+        combatCanvas.transform.GetChild(0).GetComponent<CombatText>().Activate(fillText);
     }
 
     IEnumerator _ReturnToPool()

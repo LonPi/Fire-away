@@ -45,10 +45,10 @@ public class GameManager : MonoBehaviour {
         expRequiredToCompleteLevel = 200; // for level 1
     }
 
-    public void GameOver()
+    public void ReloadLevel()
     {
         StopAllCoroutines();
-        _gameplayCanvas.OnGameOver();
+        _gameplayCanvas.OnRestartLevel();
         StartCoroutine(_ReloadLevel());
     }
 

@@ -389,7 +389,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 1682526385122118, guid: 1499667c96462484196602b7b512baa6, type: 2}
       propertyPath: m_Name
-      value: GameLost
+      value: TryAgain
       objectReference: {fileID: 0}
     - target: {fileID: 114172917677474864, guid: 1499667c96462484196602b7b512baa6,
         type: 2}
@@ -1869,7 +1869,7 @@ MonoBehaviour:
   - {fileID: 1795313975649968, guid: 98110f750c17f1b48ad1794862263a33, type: 2}
   - {fileID: 1795313975649968, guid: 424d0a8a6b82c01439cec3bd5a7b3192, type: 2}
   - {fileID: 1795313975649968, guid: d01830d814483734cb93132908c61632, type: 2}
-  InitialPoolSize: 1
+  InitialPoolSize: 0
 --- !u!4 &668798970
 Transform:
   m_ObjectHideFlags: 0

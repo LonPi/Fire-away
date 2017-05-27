@@ -10,28 +10,35 @@ public class CombatText : MonoBehaviour {
     Text text;
     string fillText;
     Enemy parent;
+    float aliveTimer;
+    RectTransform rect;
 
     void Start () {
         text = GetComponent<Text>();
-        text.text = fillText;
+        rect = GetComponent<RectTransform>();
         parent = GetComponentInParent<Enemy>();
-        Destroy(gameObject, lifeSpan);
 	}
 	
-    public void SetParams(string _fillText)
+    public void Activate(string _fillText)
     {
-        this.fillText = _fillText;
+        text.text = _fillText;
+        text.enabled = true;
+        aliveTimer = 0f;
     }
 
 	void Update () {
+        aliveTimer += Time.deltaTime;
 
+        if (aliveTimer >= lifeSpan)
+        {
+            text.enabled = false;
+        }
         Flip();
-        transform.Translate(new Vector2(0f, moveSpeed * Time.deltaTime));
 	}
 
     void Flip()
     {
-        RectTransform rect = GetComponent<RectTransform>();
+        
         if (parent.transform.localScale.x < 0 && rect.localScale.x > 0 || parent.transform.localScale.x > 0 && rect.localScale.x < 0)
         {
             Vector3 theScale = rect.localScale;

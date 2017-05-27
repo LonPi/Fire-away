@@ -59,7 +59,7 @@ public class Player : MonoBehaviour {
             animator.SetTrigger("dead");
             SoundManager.instance.PlayerPlaySingle(SoundManager.instance.deadSFX);
             _isDead = true;
-            GameManager.instance.GameOver();
+            GameManager.instance.ReloadLevel();
         }
     }
 

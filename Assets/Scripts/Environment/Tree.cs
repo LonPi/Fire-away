@@ -34,7 +34,7 @@ public class Tree : MonoBehaviour {
 
         if (hitPoints <= 0 && !_isDead)
         {
-            GameManager.instance.GameOver();
+            GameManager.instance.ReloadLevel();
             _isDead = true;
             SoundManager.instance.TreePlaySingle(SoundManager.instance.treeDeadSFX);
         }
