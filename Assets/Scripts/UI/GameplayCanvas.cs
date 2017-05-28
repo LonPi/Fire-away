@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class GameplayCanvas : MonoBehaviour {
 
     OnScreenMessage tryAgainText;
+    OnScreenMessage levelUpText;
     Text highScoreText;
     GameObject highScoreScreen;
     GameObject timer;
@@ -13,6 +14,7 @@ public class GameplayCanvas : MonoBehaviour {
     void Start ()
     {
         tryAgainText = GameObject.Find("TryAgain").GetComponentInChildren<OnScreenMessage>();
+        levelUpText = GameObject.Find("LevelUp").GetComponentInChildren<OnScreenMessage>();
         highScoreScreen = GameObject.Find("ScoreScreen");
         timer = transform.Find("Timer").gameObject;
         highScoreScreen.SetActive(false);
@@ -23,6 +25,11 @@ public class GameplayCanvas : MonoBehaviour {
         // disable timer
         timer.SetActive(false);
         StartCoroutine(_OnDisplayHighScore(name));
+    }
+
+    public void OnLevelUp()
+    {
+        levelUpText.ShowText();
     }
 
     IEnumerator _OnDisplayHighScore(string name)

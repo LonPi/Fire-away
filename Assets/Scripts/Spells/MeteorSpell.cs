@@ -61,4 +61,10 @@ public class MeteorSpell {
         timer = cooldown;
         return true;
     }
+
+    public void SetDamage(float scale)
+    {
+        this.damage = damage + damage * scale;
+        this.damage = Mathf.Floor(damage);
+    }
 }

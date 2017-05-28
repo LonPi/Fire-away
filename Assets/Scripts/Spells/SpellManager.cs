@@ -77,6 +77,13 @@ public class SpellManager : MonoBehaviour {
         return spellsData;
     }
 
+    public void OnLevelUp(int level)
+    {
+        meleeSpell.SetDamage(level * 0.03f);
+        fireballSpell.SetDamage(level * 0.03f);
+        meteorSpell.SetDamage(level * 0.03f);
+    }
+
     public struct BlinkInfo
     {
         public const float SPELL_CAST_DELAY_AFTER_BLINK = 0.5f;

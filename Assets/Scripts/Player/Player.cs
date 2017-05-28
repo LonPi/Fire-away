@@ -56,14 +56,13 @@ public class Player : MonoBehaviour {
 
         if (hitPoints <= 10 && !_lowHP)
         {
-            SoundManager.instance.PlayerPlaySingle(SoundManager.instance.lowHpSFX);
+            SoundManager.instance.PlayerPlayOneShot(SoundManager.instance.lowHpSFX);
             _lowHP = true;
         }
 
         if (hitPoints <= 0 && !_isDead)
         {
             animator.SetTrigger("dead");
-            SoundManager.instance.PlayerPlaySingle(SoundManager.instance.deadSFX);
             _isDead = true;
             GameManager.instance.DisplayHighScore("Player");
         }
@@ -102,7 +101,6 @@ public class Player : MonoBehaviour {
         {
             spellManager.meleeSpell.Cast(this);
             animator.SetTrigger("melee");
-            SoundManager.instance.SpellPlaySingle(SoundManager.instance.meleeSFX);            
         }
 
         if (Input.GetKey(KeyCode.W) && spellManager.blinkSpell.CanCast())
@@ -118,7 +116,6 @@ public class Player : MonoBehaviour {
                 Vector2 direction = pressLeft ? Vector2.left : Vector2.right;
                 spellManager.blinkSpell.Cast(this, direction);
                 animator.SetTrigger("blink");
-                SoundManager.instance.SpellPlaySingle(SoundManager.instance.blinkSFX);
             }
         }
 
@@ -126,14 +123,13 @@ public class Player : MonoBehaviour {
         {
             spellManager.fireballSpell.Cast(this);
             animator.SetTrigger("fireball");
-            SoundManager.instance.FireballPlaySingle(SoundManager.instance.rangeSFX);
+
         }
 
         if (Input.GetKey(KeyCode.R) && spellManager.meteorSpell.CanCast())
         {
             spellManager.meteorSpell.Cast(this);
             animator.SetTrigger("ulti");
-            SoundManager.instance.UltiPlaySingle(SoundManager.instance.ultiSFX);
         }
     }
 
@@ -182,6 +178,13 @@ public class Player : MonoBehaviour {
     {
         // disable input
         inputEnabled = false;
+    }
+
+    public void OnLevelUp()
+    {
+        maxHitPoints += maxHitPoints * 0.2f;
+        hitPoints = maxHitPoints;
+        spellManager.OnLevelUp(GameManager.instance.currentLevel);
     }
 
     IEnumerator _Blink()

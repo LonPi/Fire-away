@@ -43,10 +43,20 @@ public class SoundManager : MonoBehaviour
         playerFxSource.Play();
     }
 
+    public void PlayerPlayOneShot(AudioClip clip)
+    {
+        playerFxSource.PlayOneShot(clip);
+    }
+
     public void SpellPlaySingle(AudioClip clip)
     {
         spellFxSource.clip = clip;
         spellFxSource.Play();
+    }
+
+    public void SpellPlayOneShot(AudioClip clip)
+    {
+        spellFxSource.PlayOneShot(clip);
     }
 
     public void TreePlaySingle(AudioClip clip)

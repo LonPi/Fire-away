@@ -63,4 +63,10 @@ public class FireballSpell {
         lastInputTime = Time.time;
         return true;
     }
+
+    public void SetDamage(float scale)
+    {
+        this.damage = damage + damage * scale;
+        this.damage = Mathf.Floor(damage);
+    }
 }

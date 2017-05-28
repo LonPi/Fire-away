@@ -84,7 +84,9 @@ public class GameManager : MonoBehaviour {
             currentExp = 0;
             expRequiredToCompleteLevel += expRequiredToCompleteLevel * 0.2f;
             expRequiredToCompleteLevel =  Mathf.Floor(expRequiredToCompleteLevel);
-            SoundManager.instance.PlayerPlaySingle(SoundManager.instance.levelUpSFX);
+            _gameplayCanvas.OnLevelUp();
+            _playerRef.OnLevelUp();
+            SoundManager.instance.PlayerPlayOneShot(SoundManager.instance.levelUpSFX);
         }
     }
 
