@@ -23,7 +23,7 @@ PlayerSettings:
   m_SplashScreenDrawMode: 0
   m_SplashScreenBackgroundAnimationZoom: 1
   m_SplashScreenLogoAnimationZoom: 1
-  m_SplashScreenBackgroundLandscapeAspect: 1
+  m_SplashScreenBackgroundLandscapeAspect: 1.7670406
   m_SplashScreenBackgroundPortraitAspect: 1
   m_SplashScreenBackgroundLandscapeUvs:
     serializedVersion: 2
@@ -40,7 +40,8 @@ PlayerSettings:
   m_SplashScreenLogos:
   - logo: {fileID: 21300000, guid: c37736ad9444a23418299aea5a49b73a, type: 3}
     duration: 2
-  m_SplashScreenBackgroundLandscape: {fileID: 0}
+  m_SplashScreenBackgroundLandscape: {fileID: 1, guid: 00000000000000000000000000000000,
+    type: 0}
   m_SplashScreenBackgroundPortrait: {fileID: 0}
   m_VirtualRealitySplashScreen: {fileID: 0}
   m_HolographicTrackingLossScreen: {fileID: 0}
@@ -78,6 +79,7 @@ PlayerSettings:
   forceSingleInstance: 0
   resizableWindow: 0
   useMacAppStoreValidation: 0
+  macAppStoreCategory: public.app-category.games
   gpuSkinning: 0
   graphicsJobs: 0
   xboxPIXTextureCapture: 0
@@ -205,6 +207,7 @@ PlayerSettings:
   iOSMetalForceHardShadows: 0
   metalEditorSupport: 1
   metalAPIValidation: 1
+  iOSRenderExtraFrameOnPause: 1
   appleDeveloperTeamID: 
   iOSManualSigningProvisioningProfileID: 
   tvOSManualSigningProvisioningProfileID: 
@@ -255,6 +258,7 @@ PlayerSettings:
   wiiUGamePadStartupScreen: {fileID: 0}
   wiiUDrcBufferDisabled: 0
   wiiUProfilerLibPath: 
+  playModeTestRunnerEnabled: 0
   actionOnDotNetUnhandledException: 1
   enableInternalProfiler: 0
   logObjCUncaughtExceptions: 1

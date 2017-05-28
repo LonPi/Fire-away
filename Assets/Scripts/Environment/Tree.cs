@@ -48,6 +48,7 @@ public class Tree : MonoBehaviour {
     public void TakeDamage(float damage)
     {
         hitPoints -= damage;
+        hitPoints = Mathf.Floor(hitPoints);
         if (hitPoints <= 0) hitPoints = 0;
 
         StartCoroutine(_IndicateBeingDamaged());
