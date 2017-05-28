@@ -64,6 +64,9 @@ public class Meteor : MonoBehaviour {
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Collision"))
+        {
+            GameManager.instance._cameraShake.Shake(0.4f, 0.4f);
             Destroy(gameObject, 0.5f);
+        }
     }
 }

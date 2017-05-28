@@ -12,7 +12,7 @@ public class CameraFollow : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        playerCam = GetComponent<Camera>();
+        playerCam = transform.Find("Main Camera").GetComponent<Camera>();
     }
 
     // Update is called once per frame

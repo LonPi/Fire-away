@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour {
     public Tree _treeRef { get; private set; }
     public Camera _cameraRef { get; private set; }
     public GameplayCanvas _gameplayCanvas { get; private set; }
+    public CameraShake _cameraShake { get; private set; }
     public int currentLevel { get; private set; }
     public float currentExp { get; private set; }
     public float expRequiredToCompleteLevel { get; private set; }
@@ -38,6 +39,7 @@ public class GameManager : MonoBehaviour {
         _treeRef = GameObject.FindGameObjectWithTag("Tree").GetComponent<Tree>();
         _cameraRef = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         _gameplayCanvas = GameObject.FindGameObjectWithTag("GameplayCanvas").GetComponent<GameplayCanvas>();
+        _cameraShake = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraShake>();
     }
 
     void ResetProgression()
