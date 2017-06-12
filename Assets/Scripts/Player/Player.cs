@@ -182,7 +182,7 @@ public class Player : MonoBehaviour {
 
     public void OnLevelUp()
     {
-        maxHitPoints += maxHitPoints * 0.2f;
+        maxHitPoints += maxHitPoints * 0.1f;
         hitPoints = maxHitPoints;
         spellManager.OnLevelUp(GameManager.instance.currentLevel);
     }

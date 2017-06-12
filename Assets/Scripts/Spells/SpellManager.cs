@@ -79,9 +79,9 @@ public class SpellManager : MonoBehaviour {
 
     public void OnLevelUp(int level)
     {
-        meleeSpell.SetDamage(level * 0.03f);
-        fireballSpell.SetDamage(level * 0.03f);
-        meteorSpell.SetDamage(level * 0.03f);
+        meleeSpell.SetDamage(level * 0.01f);
+        fireballSpell.SetDamage(level * 0.01f);
+        meteorSpell.SetDamage(level * 0.01f);
     }
 
     public struct BlinkInfo

@@ -38,9 +38,9 @@ public class GameplayCanvas : MonoBehaviour {
         yield return new WaitForSeconds(tryAgainText.lifeSpan);
         highScoreText = highScoreScreen.GetComponentInChildren<Text>();
         highScoreText.text =
-            (name == "Player" ? "You have died!\n" : "The guardian tree has died....\n") +
-            "max kills: " + GameManager.instance.highScore.maxKills.ToString() + "\n" +
-            "max level: " + GameManager.instance.highScore.maxLevel.ToString() + "\n";
+            (name == "Player" ? "You got killed by slimes...\n" : "The Spirit Tree is dead...\n") +
+            "Max kills: " + GameManager.instance.highScore.maxKills.ToString() + "\n" +
+            "Max level: " + GameManager.instance.highScore.maxLevel.ToString() + "\n";
         highScoreScreen.SetActive(true);
     }
 

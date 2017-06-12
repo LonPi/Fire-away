@@ -25,6 +25,7 @@ public class Enemy : MonoBehaviour {
     float gravity = -20f;
     bool kinematicMotionEnabled;
     DefaultParams _defaultParams;
+    float currentScale = 0.6f;
 
 	void Start () {
         animator = GetComponent<Animator>();
@@ -130,9 +131,10 @@ public class Enemy : MonoBehaviour {
 
         _defaultParams.Reset(this);
 
-        this.damage = this.damage + (float)level * 0.4f;
-        this.hitPoints = this.hitPoints + (float)level * 0.6f;
-        
+        this.damage += this.damage * (float)level / 10;
+        this.hitPoints += this.hitPoints * (float)level / 10;
+        this.transform.localScale = new Vector3(currentScale + (float)level / 50, currentScale + (float)level / 50, 0);
+
         //Debug.Log(gameObject.name + "  level: " + level + " hp: " + hitPoints + " damage: " + damage);
     }
 

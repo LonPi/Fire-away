@@ -216,7 +216,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 224b4dc6aa0a6814aa922d75f73282b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHitPoints: 1000
+  maxHitPoints: 2000
   Slimes:
   - {fileID: 1965391097148048}
   - {fileID: 1277561050918128}
