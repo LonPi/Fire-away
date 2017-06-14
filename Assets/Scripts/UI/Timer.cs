@@ -14,8 +14,8 @@ public class Timer : MonoBehaviour {
 	
 	void Update () {
         time += Time.deltaTime;
-        var minutes = time / 60;
-        var seconds = time % 60;
+        var minutes = Mathf.FloorToInt(time / 60);
+        var seconds = Mathf.FloorToInt(time % 60);
 
         //update the label value
         timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);

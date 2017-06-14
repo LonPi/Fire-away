@@ -120,7 +120,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   meleeDamage: 20
-  meleeRange: 1.2
+  meleeRange: 1.15
   meleeCooldown: 0.5
   blinkRange: 8
   blinkCooldown: 2
